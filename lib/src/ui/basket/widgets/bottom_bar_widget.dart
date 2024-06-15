@@ -4,8 +4,10 @@ import 'package:gvg_order/src/routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 
 class BottomBarWidget extends StatelessWidget {
+  final VoidCallback onPressed;
   const BottomBarWidget({
     super.key,
+    required this.onPressed,
   });
 
   @override
@@ -42,9 +44,7 @@ class BottomBarWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
               child: InkWell(
-                onTap: () {
-                  Get.toNamed(Routes.PAYMENT);
-                },
+                onTap: onPressed,
                 child: Container(
                   height: Get.width * 0.12,
                   decoration: BoxDecoration(

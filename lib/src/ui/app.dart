@@ -11,7 +11,6 @@ class AppPage extends GetView<AppController> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Navigator(
-        initialRoute: Routes.HOME,
         onGenerateRoute: controller.generateRouteControlFunction,
       ),
     );

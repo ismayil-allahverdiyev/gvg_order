@@ -68,11 +68,12 @@ class Repository {
 
   getData({
     required String endpoint,
+    required String base,
     Map<String, dynamic>? query,
     Map<String, dynamic>? data,
   }) async {
     return await apiClient.getData(
-      endpoint: endpoint,
+      endpoint: base + endpoint,
       headers: getHeaders(),
       query: query,
       data: data,
@@ -81,12 +82,13 @@ class Repository {
 
   postData({
     required String endpoint,
+    required String base,
     Map<String, dynamic>? query,
     Map<String, dynamic>? object,
     List<Map<String, dynamic>>? list,
   }) async {
     return await apiClient.post(
-      endpoint: endpoint,
+      endpoint: base + endpoint,
       headers: getHeaders(),
       query: query,
       object: object ?? list,
@@ -105,6 +107,7 @@ class Repository {
 
   postMultiPartData(
     String endpoint,
+    String base,
     Map<String, dynamic>? query,
     Map<String, String> object,
     String fileName,
@@ -114,7 +117,7 @@ class Repository {
     newHeaders['Content-Type'] = "multipart/form-data";
     print(newHeaders);
     return await apiClient.postMultiform(
-      endpoint: endpoint,
+      endpoint: base + endpoint,
       headers: newHeaders,
       query: query,
       object: object,

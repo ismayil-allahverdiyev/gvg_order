@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gvg_order/src/routes/app_routes.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
 import 'widgets/basket_product_widget.dart';
 import 'widgets/bottom_bar_widget.dart';
@@ -50,7 +52,9 @@ class BasketPage extends StatelessWidget {
             ),
           ),
           const Divider(),
-          const BottomBarWidget()
+          BottomBarWidget(
+            onPressed: () => Get.toNamed(Routes.PAYMENT),
+          )
         ],
       ),
     );

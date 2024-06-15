@@ -26,7 +26,6 @@ Future<void> main() async {
     Get.find<LocalStorageController>().localStorage = instance;
     runApp(GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.INITIAL,
       theme: appThemeData,
       defaultTransition: Transition.rightToLeft,
       getPages: AppPages.pages,

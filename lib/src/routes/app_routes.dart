@@ -4,4 +4,7 @@ class Routes {
   static const PRODUCT = '/product';
   static const BASKET = '/basket';
   static const PAYMENT = '/payment';
+  static const COUPON = '/coupon';
+  static const LOGIN = '/login';
+  static const OUTLETS = '/outlets';
 }

@@ -54,7 +54,7 @@ class ApiClient {
   }) async {
     var response = await dio
         .get(
-      EndPoint.base_url + endpoint,
+      endpoint,
       queryParameters: query,
       data: data,
       options: Options(validateStatus: (_) => true, headers: headers),
@@ -91,12 +91,13 @@ class ApiClient {
   post(
       {required String endpoint,
       required Map<String, dynamic> headers,
+      bool? isFullLink,
       Map<String, dynamic>? query,
       Object? object}) async {
     Response response;
     response = await dio
         .post(
-      EndPoint.base_url + endpoint,
+      endpoint,
       options: Options(validateStatus: (_) => true, headers: headers),
       data: object,
       queryParameters: query,
@@ -128,7 +129,7 @@ class ApiClient {
   }) async {
     var request = http.MultipartRequest(
       "POST",
-      Uri.parse(EndPoint.base_url + endpoint),
+      Uri.parse(endpoint),
     );
 
     request.headers["Accept"] = headers["Accept"]!;
@@ -174,7 +175,7 @@ class ApiClient {
   put(String endpoint, Object? data) async {
     var response = await dio
         .put(
-      EndPoint.base_url + endpoint,
+      endpoint,
       data: data,
       options: Options(validateStatus: (_) => true),
     )
