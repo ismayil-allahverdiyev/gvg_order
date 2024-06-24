@@ -5,7 +5,7 @@ class ProductController extends GetxController {
   final Repository repository;
   ProductController({required this.repository});
 
-  var productId = 0;
+  var productId = "";
   var selectedCount = 0.obs;
   var availableProductCount = 5;
 

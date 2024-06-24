@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import '../../shared/widgets/custom_text_field_widget.dart';
 import '../../theme/app_colors.dart';
 
 class CustomSearchWidget extends StatelessWidget {
+  final Function(String) onSearch;
+  final TextEditingController controller;
+
   const CustomSearchWidget({
     super.key,
+    required this.onSearch,
+    required this.controller,
   });
 
   @override
@@ -16,7 +20,7 @@ class CustomSearchWidget extends StatelessWidget {
       toolbarHeight: kToolbarHeight + 16,
       flexibleSpace: Column(
         children: [
-          const Expanded(
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 8.0,
@@ -26,7 +30,9 @@ class CustomSearchWidget extends StatelessWidget {
               ),
               child: CustomTextField(
                   hintText: 'Search',
-                  prefixIcon: Icon(
+                  controller: controller,
+                  onChanged: onSearch,
+                  prefixIcon: const Icon(
                     Icons.search,
                     color: lightGreyColor,
                   )),
@@ -39,7 +45,7 @@ class CustomSearchWidget extends StatelessWidget {
           )
         ],
       ),
-      leading: SizedBox(),
+      leading: const SizedBox(),
       backgroundColor: Colors.transparent,
     );
   }

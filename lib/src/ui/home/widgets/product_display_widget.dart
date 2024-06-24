@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import 'package:gvg_order/src/routes/app_routes.dart';
 
 import '../../../controllers/home/home_controller.dart';
@@ -8,10 +9,10 @@ import '../../shared/widgets/custom_progress_indicator_widget.dart';
 import '../../theme/app_colors.dart';
 
 class ProductDisplayWidget extends GetWidget<HomeController> {
-  final int index;
+  final OrderList order;
   const ProductDisplayWidget({
     super.key,
-    required this.index,
+    required this.order,
   });
 
   @override
@@ -20,7 +21,7 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
       onTap: () => Get.toNamed(
         Routes.PRODUCT,
         arguments: {
-          'productId': index,
+          'productId': order.productId,
           'selectedCount': 0,
           'availableProductCount': 30,
         },
@@ -34,7 +35,7 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
             clipBehavior: Clip.none,
             children: [
               Hero(
-                tag: index.toString(),
+                tag: order.productId.toString(),
                 child: CachedNetworkImage(
                   imageUrl:
                       "https://media.istockphoto.com/id/458464735/tr/foto%C4%9Fraf/coke.jpg?s=2048x2048&w=is&k=20&c=DpnH4v1YRs4l1rmzu-xFi3wRjK44FUTYQBD8FJTwHx0=",
@@ -59,18 +60,18 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
                 right: -Get.width * 0.05 / 2,
                 child: GestureDetector(
                   onTap: () {
-                    print(index);
-                    if (controller.openIndex.value == index) {
+                    print(order.productId);
+                    if (controller.openIndex.value == order.productId) {
                       controller.openIndex.value = null;
                     } else {
-                      controller.openIndex.value = index;
+                      controller.openIndex.value = order.productId;
                     }
                   },
                   child: Obx(
                     () {
                       return Container(
                         width: Get.width * 0.08,
-                        height: controller.openIndex.value == index
+                        height: controller.openIndex.value == order.productId
                             ? Get.width * 0.24 + 2
                             : Get.width * 0.08 + 2,
                         decoration: BoxDecoration(
@@ -98,10 +99,11 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
                                   const Duration(milliseconds: 300),
                               child: Obx(
                                 () {
-                                  return controller.openIndex.value == index
+                                  return controller.openIndex.value ==
+                                          order.productId
                                       ? SizedBox(
                                           height: controller.openIndex.value ==
-                                                  index
+                                                  order.productId
                                               ? Get.width * 0.16
                                               : 0,
                                           child: Column(
@@ -113,7 +115,7 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
                                                     .withOpacity(0.1),
                                                 child: Center(
                                                   child: Text(
-                                                    index.toString(),
+                                                    order.productId.toString(),
                                                     style: const TextStyle(
                                                       color: primaryColor,
                                                       fontWeight:
@@ -154,7 +156,9 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Product describti $index',
+                order.productName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: textColor,
                   fontWeight: FontWeight.bold,
@@ -167,13 +171,35 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
               left: Get.width / 6 * 0.25,
               right: Get.width / 6 * 0.1,
             ),
-            child: const Align(
+            child: Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                '\$10',
-                style: const TextStyle(
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold,
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "${order.listPrice} tl",
+                      style: TextStyle(
+                        color: order.listPrice != order.discountedListPrice
+                            ? redColor
+                            : null,
+                        decoration: order.listPrice != order.discountedListPrice
+                            ? TextDecoration.lineThrough
+                            : null,
+                        decorationColor: primaryColor,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: " ",
+                    ),
+                    if (order.listPrice != order.discountedListPrice)
+                      TextSpan(
+                        text: "${order.listPrice} tl",
+                      ),
+                  ],
                 ),
               ),
             ),

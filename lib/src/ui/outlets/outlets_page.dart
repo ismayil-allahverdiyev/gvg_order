@@ -1,7 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/routes/app_routes.dart';
 import 'package:gvg_order/src/ui/shared/widgets/custom_text_field_widget.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
 
@@ -13,6 +12,12 @@ class OutletsPage extends GetView<OutletsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(Routes.HOME);
+        },
+        child: const Icon(Icons.refresh),
+      ),
       body: Column(
         children: [
           const SizedBox(
