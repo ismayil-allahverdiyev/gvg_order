@@ -20,6 +20,7 @@ class BodyWidget extends GetWidget<HomeController> {
           itemBuilder: (BuildContext context, int index) {
             return ProductDisplayWidget(
               order: controller.orderList[index],
+              index: index,
             );
           },
           itemCount: controller.orderList.length,

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/controllers/product/product_controller.dart';
 import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import 'package:gvg_order/src/routes/app_routes.dart';
 
@@ -10,9 +11,11 @@ import '../../theme/app_colors.dart';
 
 class ProductDisplayWidget extends GetWidget<HomeController> {
   final OrderList order;
+  final int index;
   const ProductDisplayWidget({
     super.key,
     required this.order,
+    required this.index,
   });
 
   @override
@@ -58,22 +61,16 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
               Positioned(
                 top: -Get.width * 0.05 / 2,
                 right: -Get.width * 0.05 / 2,
-                child: GestureDetector(
-                  onTap: () {
-                    print(order.productId);
-                    if (controller.openIndex.value == order.productId) {
-                      controller.openIndex.value = null;
-                    } else {
-                      controller.openIndex.value = order.productId;
-                    }
-                  },
-                  child: Obx(
-                    () {
-                      return Container(
+                child: GetBuilder<HomeController>(
+                    id: "orderList",
+                    builder: (sizeController) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
                         width: Get.width * 0.08,
-                        height: controller.openIndex.value == order.productId
-                            ? Get.width * 0.24 + 2
-                            : Get.width * 0.08 + 2,
+                        height:
+                            sizeController.orderList[index].selectedCount > 0
+                                ? Get.width * 0.24 + 2
+                                : Get.width * 0.08 + 2,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
@@ -83,68 +80,94 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
                         ),
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: Get.width * 0.08,
-                              width: Get.width * 0.08,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.add,
-                                  color: primaryColor,
+                            InkWell(
+                              onTap: () => controller.updateProductCount(
+                                product: order,
+                                isAdd: true,
+                              ),
+                              radius: Get.width * 0.08,
+                              child: SizedBox(
+                                height: Get.width * 0.08,
+                                width: Get.width * 0.08,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.add,
+                                    color: primaryColor,
+                                  ),
                                 ),
                               ),
                             ),
-                            AnimatedSize(
-                              duration: const Duration(milliseconds: 300),
-                              reverseDuration:
-                                  const Duration(milliseconds: 300),
-                              child: Obx(
-                                () {
-                                  return controller.openIndex.value ==
-                                          order.productId
-                                      ? SizedBox(
-                                          height: controller.openIndex.value ==
-                                                  order.productId
-                                              ? Get.width * 0.16
-                                              : 0,
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: Get.width * 0.08,
-                                                width: Get.width * 0.08,
-                                                color: primaryColor
-                                                    .withOpacity(0.1),
-                                                child: Center(
-                                                  child: Text(
-                                                    order.productId.toString(),
-                                                    style: const TextStyle(
-                                                      color: primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                            GetBuilder<HomeController>(
+                                id: "orderList",
+                                builder: (countController) {
+                                  return AnimatedSize(
+                                    duration: const Duration(milliseconds: 300),
+                                    reverseDuration:
+                                        const Duration(milliseconds: 300),
+                                    child: countController.orderList[index]
+                                                .selectedCount >
+                                            0
+                                        ? SizedBox(
+                                            height: countController
+                                                        .orderList[index]
+                                                        .selectedCount >
+                                                    0
+                                                ? Get.width * 0.16
+                                                : 0,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: Get.width * 0.08,
+                                                  width: Get.width * 0.08,
+                                                  color: primaryColor
+                                                      .withOpacity(0.1),
+                                                  child: Center(
+                                                    child: GetBuilder<
+                                                        HomeController>(
+                                                      id: "orderList",
+                                                      builder: (controller) {
+                                                        return Text(
+                                                          controller
+                                                              .orderList[index]
+                                                              .selectedCount
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                            color: primaryColor,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        );
+                                                      },
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: Get.width * 0.08,
-                                                width: Get.width * 0.08,
-                                                child: const Icon(
-                                                  Icons.remove,
-                                                  color: primaryColor,
+                                                InkWell(
+                                                  onTap: () => controller
+                                                      .updateProductCount(
+                                                    product: order,
+                                                    isAdd: false,
+                                                  ),
+                                                  radius: Get.width * 0.08,
+                                                  child: SizedBox(
+                                                    height: Get.width * 0.08,
+                                                    width: Get.width * 0.08,
+                                                    child: const Icon(
+                                                      Icons.remove,
+                                                      color: primaryColor,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : const SizedBox();
-                                },
-                              ),
-                            ),
+                                              ],
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                  );
+                                }),
                           ],
                         ),
                       );
-                    },
-                  ),
-                ),
+                    }),
               )
             ],
           ),

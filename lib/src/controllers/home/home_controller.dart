@@ -5,6 +5,7 @@ import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import '../../data/models/parent_categories/parent_categories_model.dart';
 import '../../data/models/sub_categories/sub_categories_model.dart';
 import '../../data/repository/repository.dart';
+import '../basket/basket_controller.dart';
 
 class HomeController extends GetxController {
   final Repository repository;
@@ -35,7 +36,7 @@ class HomeController extends GetxController {
         base: EndPoint.base_url_product,
         endpoint: EndPoint.get_list_orders,
         query: {
-          "listId": "ab957e56-03ac-4eb4-a08b-6d11be803089",
+          "listId": "149e56b0-af99-4262-b4a8-78967c6b6bcc",
           "parentCategoryId": selectedParentCategory.value?.id ?? "",
           "subCategoryId": selectedSubCategory.value?.id ?? "",
           "pageNumber": 1,
@@ -47,6 +48,19 @@ class HomeController extends GetxController {
 
     if (response.code == 200) {
       orderList.value = response.data ?? [];
+
+      var basketController = Get.find<BasketController>();
+
+      orderList.forEach((element) {
+        var index = basketController.basketList.indexWhere(
+            (basketElement) => basketElement.productId == element.productId);
+        if (index != -1) {
+          element.selectedCount =
+              basketController.basketList[index].selectedCount;
+        }
+      });
+
+      orderList.refresh();
     } else {
       repository.showMessage(
         title: "Error",
@@ -56,6 +70,7 @@ class HomeController extends GetxController {
   }
 
   getParentCategories() async {
+    parentCategories.clear();
     var response = parentCategoriesModelFromJson(
       await repository.getData(
         base: EndPoint.base_url_product,
@@ -76,6 +91,8 @@ class HomeController extends GetxController {
   }
 
   getSUbCategories() async {
+    subCategories.clear();
+    orderList.clear();
     var response = subCategoriesModelFromJson(
       await repository.getData(
         base: EndPoint.base_url_product,
@@ -98,5 +115,21 @@ class HomeController extends GetxController {
         message: response.message,
       );
     }
+  }
+
+  updateProductCount({required OrderList product, required bool isAdd}) async {
+    var basketController = Get.find<BasketController>();
+    var index = orderList
+        .indexWhere((element) => element.productId == product.productId);
+    if (isAdd) {
+      orderList[index].selectedCount++;
+    } else {
+      orderList[index].selectedCount--;
+    }
+    basketController.editBasketList(orderList: orderList[index]);
+
+    // orderList.value = orderList;
+    // orderList.refresh();
+    update(["orderList"]);
   }
 }

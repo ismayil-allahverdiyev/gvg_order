@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gvg_order/src/controllers/product/product_controller.dart';
@@ -24,42 +26,95 @@ class ProductPage extends GetView<ProductController> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 0, 0),
               child: ListView(
-                children: const [
-                  Text(
-                    "Product Brand",
-                    style: TextStyle(
-                      color: primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                children: [
+                  Obx(
+                    () {
+                      return Text(
+                        controller.productDetail.value?.brandName ?? "",
+                        style: const TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      );
+                    },
                   ),
-                  Text(
-                    "Coca Cola Original Taste",
-                    style: TextStyle(
-                      color: textColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                  Obx(
+                    () {
+                      return Text(
+                        controller.productDetail.value?.productName ?? "",
+                        style: const TextStyle(
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      );
+                    },
                   ),
-                  Text(
-                    "Product Description is here and it is a long text that will be displayed in the product page",
-                    style: TextStyle(
-                      color: lightTextColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                  Obx(
+                    () {
+                      return Text(
+                        controller.productDetail.value?.description1 ?? "",
+                        style: const TextStyle(
+                          color: lightTextColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      );
+                    },
+                  ),
+                  Obx(
+                    () {
+                      if (controller.productDetail.value?.description2 !=
+                          null) {
+                        return Text(
+                          controller.productDetail.value?.description2 ?? "",
+                          style: const TextStyle(
+                            color: lightTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                  ),
+                  Obx(
+                    () {
+                      if (controller.productDetail.value?.description3 !=
+                          null) {
+                        return Text(
+                          controller.productDetail.value?.description3 ?? "",
+                          style: const TextStyle(
+                            color: lightTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                  ),
+                  Obx(
+                    () {
+                      if (controller.productDetail.value?.description4 !=
+                          null) {
+                        return Text(
+                          controller.productDetail.value?.description4 ?? "",
+                          style: const TextStyle(
+                            color: lightTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
                   ),
                 ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              "${controller.availableProductCount} products available",
-              style: TextStyle(
-                color: lightGreyColor,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -71,14 +126,50 @@ class ProductPage extends GetView<ProductController> {
               children: [
                 SizedBox(
                   width: Get.width / 4,
-                  child: const Center(
-                    child: Text(
-                      "20\$",
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Obx(
+                          () {
+                            return Text(
+                              "${controller.productDetail.value?.listPrice ?? ""}\$",
+                              style: TextStyle(
+                                color: controller.productDetail.value
+                                            ?.discountedListPrice ==
+                                        controller
+                                            .productDetail.value?.listPrice
+                                    ? primaryColor
+                                    : redColor,
+                                fontWeight: FontWeight.bold,
+                                decoration: controller.productDetail.value
+                                            ?.discountedListPrice ==
+                                        controller
+                                            .productDetail.value?.listPrice
+                                    ? TextDecoration.none
+                                    : TextDecoration.lineThrough,
+                                decorationColor: primaryColor,
+                                fontSize: 16,
+                              ),
+                            );
+                          },
+                        ),
+                        Obx(
+                          () {
+                            return controller.productDetail.value
+                                        ?.discountedListPrice !=
+                                    controller.productDetail.value?.listPrice
+                                ? Text(
+                                    "${controller.productDetail.value?.discountedListPrice ?? ""}\$",
+                                    style: const TextStyle(
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  )
+                                : const SizedBox();
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),

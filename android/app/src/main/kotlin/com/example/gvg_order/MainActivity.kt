@@ -1,4 +1,4 @@
-package com.example.gvg_order
+package com.gvg.order
 
 import io.flutter.embedding.android.FlutterActivity
 

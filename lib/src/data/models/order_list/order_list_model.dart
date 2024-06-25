@@ -58,6 +58,7 @@ class OrderList {
   int piecesInBox;
   int listPrice;
   int discountedListPrice;
+  int selectedCount = 0;
 
   OrderList({
     required this.productId,
@@ -69,15 +70,18 @@ class OrderList {
     required this.discountedListPrice,
   });
 
-  factory OrderList.fromJson(Map<String, dynamic> json) => OrderList(
-        productId: json["productId"],
-        productListId: json["productListId"],
-        productName: json["productName"],
-        stockQuantity: json["stockQuantity"],
-        piecesInBox: json["piecesInBox"],
-        listPrice: json["listPrice"],
-        discountedListPrice: json["discountedListPrice"],
-      );
+  factory OrderList.fromJson(Map<String, dynamic> json) {
+    var res = json;
+    return OrderList(
+      productId: json["productId"],
+      productListId: json["productListId"],
+      productName: json["productName"],
+      stockQuantity: json["stockQuantity"],
+      piecesInBox: json["piecesInBox"],
+      listPrice: json["listPrice"],
+      discountedListPrice: json["discountedListPrice"] ?? json["listPrice"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "productId": productId,
@@ -87,5 +91,6 @@ class OrderList {
         "piecesInBox": piecesInBox,
         "listPrice": listPrice,
         "discountedListPrice": discountedListPrice,
+        "selectedCount": selectedCount,
       };
 }

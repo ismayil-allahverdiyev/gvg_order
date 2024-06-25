@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/controllers/basket/basket_controller.dart';
+import 'package:gvg_order/src/controllers/home/home_controller.dart';
 import 'package:gvg_order/src/routes/app_routes.dart';
 
 import '../../theme/app_colors.dart';
 
-class BasketWidget extends StatelessWidget {
+class BasketWidget extends GetWidget<BasketController> {
   const BasketWidget({
     super.key,
   });
@@ -15,8 +17,10 @@ class BasketWidget extends StatelessWidget {
       padding: const EdgeInsets.only(right: 8.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: () {
-          Get.toNamed(Routes.BASKET);
+        onTap: () async {
+          controller.getTemporaryCardInfo();
+          await Get.toNamed(Routes.BASKET);
+          Get.find<HomeController>().onInit();
         },
         child: Container(
           height: Get.width * 0.1,
@@ -30,7 +34,6 @@ class BasketWidget extends StatelessWidget {
                 width: Get.width * 0.1,
               ),
               Container(
-                width: Get.width * 0.1,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(8),
@@ -38,13 +41,26 @@ class BasketWidget extends StatelessWidget {
                   ),
                   color: primaryColor.withOpacity(0.1),
                 ),
-                child: const Center(
-                  child: Text(
-                    '24tl',
-                    style: TextStyle(
-                      color: primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Center(
+                    child: Obx(
+                      () {
+                        var price = controller.basketList.fold(
+                            0,
+                            (previous, current) =>
+                                previous +
+                                current.discountedListPrice *
+                                    current.selectedCount);
+                        return Text(
+                          '${price > 1000 ? price.toString().substring(0, 3) + "..." : price} tl',
+                          style: const TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

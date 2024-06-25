@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gvg_order/src/routes/app_routes.dart';
+import '../../../controllers/basket/basket_controller.dart';
 import '../../theme/app_colors.dart';
 
-class BottomBarWidget extends StatelessWidget {
+class BottomBarWidget extends GetWidget<BasketController> {
   final VoidCallback onPressed;
   const BottomBarWidget({
     super.key,
@@ -19,9 +22,9 @@ class BottomBarWidget extends StatelessWidget {
         children: [
           SizedBox(
             width: Get.width / 4,
-            child: const Column(
+            child: Column(
               children: [
-                Text(
+                const Text(
                   "Total",
                   style: TextStyle(
                     color: textColor,
@@ -29,13 +32,17 @@ class BottomBarWidget extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                Text(
-                  "20\$",
-                  style: TextStyle(
-                    color: primaryColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                Obx(
+                  () {
+                    return Text(
+                      "${controller.kdvTotal.value.toStringAsFixed(2)}\$",
+                      style: const TextStyle(
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

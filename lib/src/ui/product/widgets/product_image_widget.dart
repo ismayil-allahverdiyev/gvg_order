@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/controllers/product/product_controller.dart';
 import '../../shared/widgets/custom_progress_indicator_widget.dart';
 import '../../theme/app_colors.dart';
 
-class ProductImageWidget extends StatelessWidget {
+class ProductImageWidget extends GetWidget<ProductController> {
   const ProductImageWidget({
     super.key,
     required this.productId,
@@ -36,7 +37,16 @@ class ProductImageWidget extends StatelessWidget {
               top: 0,
               right: 0,
               child: IconButton(
-                icon: Icon(Icons.favorite_outline_sharp),
+                icon: Obx(
+                  () {
+                    return Icon(
+                      controller.productDetail.value != null &&
+                              controller.productDetail.value!.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_outline_sharp,
+                    );
+                  },
+                ),
                 onPressed: () {},
               ),
             ),

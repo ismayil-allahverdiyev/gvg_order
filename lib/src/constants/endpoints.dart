@@ -9,4 +9,8 @@ class EndPoint {
 
   static const get_sub_categories =
       "mobile/get-all-sub-categories-by-parent-category-id";
+
+  static const get_detail_order = "mobile/get-detail-order";
+
+  static const get_temporary_card_info = "mobile/temporarily-card-Info";
 }

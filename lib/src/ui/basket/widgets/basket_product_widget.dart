@@ -1,16 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
+import '../../../controllers/basket/basket_controller.dart';
 import '../../../routes/app_routes.dart';
 import '../../shared/widgets/custom_progress_indicator_widget.dart';
 import '../../theme/app_colors.dart';
 import 'background_widget.dart';
 
-class BasketProductWidget extends StatelessWidget {
-  final int index;
+class BasketProductWidget extends GetWidget<BasketController> {
+  final OrderList product;
+  final bool isLast;
   const BasketProductWidget({
     super.key,
-    required this.index,
+    required this.product,
+    required this.isLast,
   });
 
   @override
@@ -34,7 +38,7 @@ class BasketProductWidget extends StatelessWidget {
                 Get.toNamed(
                   Routes.PRODUCT,
                   arguments: {
-                    'productId': index,
+                    'productId': product.productId,
                     'selectedCount': 1,
                     'availableProductCount': 30,
                   },
@@ -68,25 +72,40 @@ class BasketProductWidget extends StatelessWidget {
                   ),
                   SizedBox(
                     width: Get.width * 0.4,
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Coca cola original taste 1.5L",
+                          product.productName,
                           maxLines: 2,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: textColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
-                          "20\$",
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: "${product.discountedListPrice}\$",
+                              ),
+                              TextSpan(
+                                text:
+                                    " + ${controller.kdvProducts.firstWhere((value) {
+                                  return (value.id == product.productId);
+                                }).kdv}\$",
+                                style: const TextStyle(
+                                  color: lightTextColor,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -102,33 +121,57 @@ class BasketProductWidget extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           flex: 1,
-                          child: Icon(
-                            Icons.add,
-                            color: primaryColor,
+                          child: GestureDetector(
+                            onTap: () {
+                              product.selectedCount++;
+                              controller.editBasketList(orderList: product);
+                            },
+                            child: const Icon(
+                              Icons.add,
+                              color: primaryColor,
+                            ),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Container(
                             color: primaryColor.withOpacity(0.1),
-                            child: const Center(
-                              child: Text(
-                                "1",
-                                style: TextStyle(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            child: Center(
+                              child: GetBuilder<BasketController>(
+                                id: "basketList",
+                                builder: (controller) {
+                                  return Text(
+                                    controller.basketList
+                                        .firstWhere(
+                                          (element) =>
+                                              element.productId ==
+                                              product.productId,
+                                        )
+                                        .selectedCount
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
                         ),
-                        const Expanded(
+                        Expanded(
                           flex: 1,
-                          child: Icon(
-                            Icons.remove,
-                            color: primaryColor,
+                          child: GestureDetector(
+                            onTap: () {
+                              product.selectedCount--;
+                              controller.editBasketList(orderList: product);
+                            },
+                            child: const Icon(
+                              Icons.remove,
+                              color: primaryColor,
+                            ),
                           ),
                         ),
                       ],
@@ -138,7 +181,7 @@ class BasketProductWidget extends StatelessWidget {
               ),
             ),
           ),
-          index < 4
+          !isLast
               ? const Divider(
                   endIndent: 12,
                   indent: 12,
