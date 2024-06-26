@@ -13,36 +13,40 @@ class GeneralCategoriesWidget extends GetWidget<HomeController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        return SliverAppBar(
-          floating: true,
-          pinned: true,
-          expandedHeight: controller.selectedParentCategory.value == null
-              ? 0
-              : controller.subCategories.isEmpty
-                  ? kToolbarHeight
-                  : kToolbarHeight * 2,
-          toolbarHeight: controller.selectedParentCategory.value == null
-              ? 0
-              : controller.subCategories.isEmpty
-                  ? kToolbarHeight
-                  : kToolbarHeight * 2,
-          foregroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          flexibleSpace: Obx(
-            () {
-              return Column(
-                children: controller.selectedParentCategory.value == null
-                    ? []
-                    : [
-                        const CategoriesWidget(),
-                        const SubCategoryWidget(),
-                      ],
+        return controller.selectedTab.value == 0
+            ? SliverAppBar(
+                floating: true,
+                pinned: true,
+                expandedHeight: controller.selectedParentCategory.value == null
+                    ? 0
+                    : controller.subCategories.isEmpty
+                        ? kToolbarHeight
+                        : kToolbarHeight * 2,
+                toolbarHeight: controller.selectedParentCategory.value == null
+                    ? 0
+                    : controller.subCategories.isEmpty
+                        ? kToolbarHeight
+                        : kToolbarHeight * 2,
+                foregroundColor: Colors.white,
+                surfaceTintColor: Colors.white,
+                flexibleSpace: Obx(
+                  () {
+                    return Column(
+                      children: controller.selectedParentCategory.value == null
+                          ? []
+                          : [
+                              const CategoriesWidget(),
+                              const SubCategoryWidget(),
+                            ],
+                    );
+                  },
+                ),
+                leading: const SizedBox(),
+                backgroundColor: Colors.transparent,
+              )
+            : const SliverToBoxAdapter(
+                child: SizedBox(),
               );
-            },
-          ),
-          leading: const SizedBox(),
-          backgroundColor: Colors.transparent,
-        );
       },
     );
   }

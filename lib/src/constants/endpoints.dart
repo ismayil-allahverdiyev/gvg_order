@@ -13,4 +13,11 @@ class EndPoint {
   static const get_detail_order = "mobile/get-detail-order";
 
   static const get_temporary_card_info = "mobile/temporarily-card-Info";
+
+  static const get_productlists_by_outlet_type =
+      "mobile/get-productlists-by-outlet-type";
+
+  static const getCampaign = "mobile/get-campaign";
+
+  static const getCampaigns = "mobile/get-campaigns";
 }

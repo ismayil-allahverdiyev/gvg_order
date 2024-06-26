@@ -7,9 +7,15 @@ import '../../data/models/sub_categories/sub_categories_model.dart';
 import '../../data/repository/repository.dart';
 import '../basket/basket_controller.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with GetTickerProviderStateMixin {
   final Repository repository;
   HomeController({required this.repository});
+
+  var outletId = "";
+  var outletName = "";
+  var listId = "";
+
+  var selectedTab = 0.obs;
 
   var openIndex = Rxn<String>();
 
@@ -25,6 +31,9 @@ class HomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    outletId = Get.arguments["outletId"];
+    outletName = Get.arguments["outletName"];
+    listId = Get.arguments["listId"];
 
     await getParentCategories();
     await getListOrders();
@@ -60,6 +69,28 @@ class HomeController extends GetxController {
         }
       });
 
+      orderList.refresh();
+    } else {
+      repository.showMessage(
+        title: "Error",
+        message: response.message,
+      );
+    }
+  }
+
+  getCampaigns() async {
+    var response = orderListModelFromJson(
+      await repository.getData(
+        base: EndPoint.base_url_product,
+        endpoint: EndPoint.getCampaigns,
+        query: {
+          "listId": listId,
+        },
+      ),
+    );
+
+    if (response.code == 200) {
+      orderList.value = response.data ?? [];
       orderList.refresh();
     } else {
       repository.showMessage(

@@ -10,6 +10,7 @@ class BasketController extends GetxController {
 
   var basketList = <OrderList>[].obs;
   var kdvProducts = <KdvProduct>[].obs;
+  var total = 0.0.obs;
   var kdvTotal = 0.0.obs;
   var justKdvTotal = 0.0.obs;
 
@@ -32,6 +33,16 @@ class BasketController extends GetxController {
     }
 
     basketList.refresh();
+    total.value = basketList.fold(
+      0,
+      (previous, current) =>
+          previous +
+          (current.discountedListPrice != current.listPrice &&
+                      current.discountedListPrice != 0
+                  ? current.discountedListPrice
+                  : current.listPrice) *
+              current.selectedCount,
+    );
     print(basketList);
     update(["basketList"]);
 

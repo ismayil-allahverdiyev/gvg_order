@@ -12,10 +12,12 @@ import '../../theme/app_colors.dart';
 class ProductDisplayWidget extends GetWidget<HomeController> {
   final OrderList order;
   final int index;
+  final bool isCampaign;
   const ProductDisplayWidget({
     super.key,
     required this.order,
     required this.index,
+    required this.isCampaign,
   });
 
   @override
@@ -24,9 +26,10 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
       onTap: () => Get.toNamed(
         Routes.PRODUCT,
         arguments: {
-          'productId': order.productId,
+          'productId': isCampaign ? order.id : order.productId,
           'selectedCount': 0,
           'availableProductCount': 30,
+          'isCampaign': isCampaign,
         },
       ),
       child: Column(

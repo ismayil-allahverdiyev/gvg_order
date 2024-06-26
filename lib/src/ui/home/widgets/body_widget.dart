@@ -21,6 +21,7 @@ class BodyWidget extends GetWidget<HomeController> {
             return ProductDisplayWidget(
               order: controller.orderList[index],
               index: index,
+              isCampaign: controller.selectedTab.value == 1,
             );
           },
           itemCount: controller.orderList.length,

@@ -10,8 +10,8 @@ class OrderListModel {
   bool status;
   String statusText;
   String message;
-  dynamic rowCount;
-  int totalCount;
+  int? rowCount;
+  int? totalCount;
   List<OrderList>? data;
 
   OrderListModel({
@@ -51,7 +51,8 @@ class OrderListModel {
 }
 
 class OrderList {
-  String productId;
+  String? id;
+  String? productId;
   String productListId;
   String productName;
   int stockQuantity;
@@ -59,8 +60,11 @@ class OrderList {
   int listPrice;
   int discountedListPrice;
   int selectedCount = 0;
+  String? typeId;
+  int discountedPrice;
 
   OrderList({
+    required this.id,
     required this.productId,
     required this.productListId,
     required this.productName,
@@ -68,22 +72,30 @@ class OrderList {
     required this.piecesInBox,
     required this.listPrice,
     required this.discountedListPrice,
+    this.selectedCount = 0,
+    this.typeId,
+    this.discountedPrice = 0,
   });
 
   factory OrderList.fromJson(Map<String, dynamic> json) {
     var res = json;
     return OrderList(
+      id: json["id"],
       productId: json["productId"],
       productListId: json["productListId"],
-      productName: json["productName"],
-      stockQuantity: json["stockQuantity"],
+      productName: json["productName"] ?? json["name"],
+      stockQuantity: json["stockQuantity"] ?? json["stock"],
       piecesInBox: json["piecesInBox"],
       listPrice: json["listPrice"],
       discountedListPrice: json["discountedListPrice"] ?? json["listPrice"],
+      selectedCount: json["selectedCount"] ?? 0,
+      typeId: json["typeId"],
+      discountedPrice: json["discountedPrice"] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "productId": productId,
         "productListId": productListId,
         "productName": productName,
@@ -92,5 +104,7 @@ class OrderList {
         "listPrice": listPrice,
         "discountedListPrice": discountedListPrice,
         "selectedCount": selectedCount,
+        "typeId": typeId,
+        "discountedPrice": discountedPrice,
       };
 }

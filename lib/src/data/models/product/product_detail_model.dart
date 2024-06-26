@@ -76,20 +76,23 @@ class ProductData {
     required this.isFavorite,
   });
 
-  factory ProductData.fromJson(Map<String, dynamic> json) => ProductData(
-        id: json["id"],
-        productListId: json["productListId"],
-        productName: json["productName"],
-        stockQuantity: json["stockQuantity"],
-        listPrice: json["listPrice"],
-        discountedListPrice: json["discountedListPrice"],
-        description1: json["description1"],
-        description2: json["description2"],
-        description3: json["description3"],
-        description4: json["description4"],
-        brandName: json["brandName"],
-        isFavorite: json["isFavorite"],
-      );
+  factory ProductData.fromJson(Map<String, dynamic> json) {
+    var res = json;
+    return ProductData(
+      id: json["id"],
+      productListId: json["productListId"],
+      productName: json["productName"],
+      stockQuantity: json["stockQuantity"],
+      listPrice: json["listPrice"],
+      discountedListPrice: json["discountedListPrice"] ?? json["listPrice"],
+      description1: json["description1"],
+      description2: json["description2"],
+      description3: json["description3"],
+      description4: json["description4"],
+      brandName: json["brandName"],
+      isFavorite: json["isFavorite"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,

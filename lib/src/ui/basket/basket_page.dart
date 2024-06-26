@@ -63,7 +63,7 @@ class BasketPage extends GetView<BasketController> {
           Obx(
             () {
               return Text(
-                "Total KDV: " +
+                "Tostal KDV: " +
                     controller.justKdvTotal.value.toStringAsFixed(2) +
                     '\$',
                 style: TextStyle(

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gvg_order/src/controllers/basket/basket_controller.dart';
@@ -46,14 +48,8 @@ class BasketWidget extends GetWidget<BasketController> {
                   child: Center(
                     child: Obx(
                       () {
-                        var price = controller.basketList.fold(
-                            0,
-                            (previous, current) =>
-                                previous +
-                                current.discountedListPrice *
-                                    current.selectedCount);
                         return Text(
-                          '${price > 1000 ? price.toString().substring(0, 3) + "..." : price} tl',
+                          '${controller.total.value > 1000 ? "${controller.total.value}..." : controller.total.value} tl',
                           style: const TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,
