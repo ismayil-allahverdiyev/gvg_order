@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:gvg_order/src/data/models/campaign/campaign_detail.dart';
+
 ProductDetailModel productDetailModelFromJson(String str) =>
     ProductDetailModel.fromJson(json.decode(str));
 
@@ -60,6 +62,7 @@ class ProductData {
   String? description4;
   String brandName;
   bool isFavorite;
+  List<Product>? products;
 
   ProductData({
     required this.id,
@@ -74,6 +77,7 @@ class ProductData {
     required this.description4,
     required this.brandName,
     required this.isFavorite,
+    this.products,
   });
 
   factory ProductData.fromJson(Map<String, dynamic> json) {

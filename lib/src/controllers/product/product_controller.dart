@@ -11,6 +11,8 @@ class ProductController extends GetxController {
   final Repository repository;
   ProductController({required this.repository});
 
+  var listId = "";
+
   var productId = "";
   var selectedCount = 0.obs;
   var availableProductCount = 5;
@@ -30,6 +32,7 @@ class ProductController extends GetxController {
     selectedCount.value = Get.arguments["selectedCount"];
     availableProductCount = Get.arguments["availableProductCount"];
     isCampaign = Get.arguments["isCampaign"];
+    listId = Get.arguments["listId"];
 
     basketController = Get.find<BasketController>();
     homeController = Get.find<HomeController>();
@@ -50,8 +53,8 @@ class ProductController extends GetxController {
 
       basketController!.editBasketList(
         orderList: OrderList(
-          discountedListPrice: 0,
-          listPrice: 0,
+          discountedListPrice: productDetail.value!.discountedListPrice,
+          listPrice: productDetail.value!.listPrice,
           productId: productDetail.value!.id,
           productName: productDetail.value!.productName,
           productListId: productDetail.value!.productListId,
@@ -67,6 +70,8 @@ class ProductController extends GetxController {
           element.selectedCount = selectedCount.value;
         }
       });
+
+      homeController!.update(["orderList"]);
     } else {
       repository.showMessage(
         title: "Quota restriction",
@@ -134,6 +139,7 @@ class ProductController extends GetxController {
         productName: campaignDetail.value!.name,
         productListId: campaignDetail.value!.productListId,
         stockQuantity: campaignDetail.value!.stock,
+        products: campaignDetail.value!.products,
       );
     } else {
       repository.showMessage(
@@ -150,7 +156,7 @@ class ProductController extends GetxController {
         endpoint: EndPoint.get_detail_order,
         query: {
           "id": productId,
-          "listId": "149e56b0-af99-4262-b4a8-78967c6b6bcc",
+          "listId": listId,
           "isCampaign": isCampaign,
         },
       ),

@@ -23,6 +23,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   var parentCategories = <ParentCategory>[].obs;
   var subCategories = <SubCategory>[].obs;
 
+  var tabController = Rxn<TabController>();
+
   var selectedParentCategory = Rxn<ParentCategory>();
   var selectedSubCategory = Rxn<SubCategory>();
 
@@ -35,17 +37,23 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     outletName = Get.arguments["outletName"];
     listId = Get.arguments["listId"];
 
+    tabController.value = TabController(length: 2, vsync: this);
+    selectedTab.value = 0;
+
     await getParentCategories();
     await getListOrders();
   }
 
   getListOrders() async {
+    orderList.clear();
+    orderList.refresh();
+
     var response = orderListModelFromJson(
       await repository.getData(
         base: EndPoint.base_url_product,
         endpoint: EndPoint.get_list_orders,
         query: {
-          "listId": "149e56b0-af99-4262-b4a8-78967c6b6bcc",
+          "listId": listId,
           "parentCategoryId": selectedParentCategory.value?.id ?? "",
           "subCategoryId": selectedSubCategory.value?.id ?? "",
           "pageNumber": 1,
@@ -79,6 +87,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   getCampaigns() async {
+    orderList.clear();
+    orderList.refresh();
+
     var response = orderListModelFromJson(
       await repository.getData(
         base: EndPoint.base_url_product,
@@ -91,6 +102,20 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
     if (response.code == 200) {
       orderList.value = response.data ?? [];
+      orderList.refresh();
+
+      var basketController = Get.find<BasketController>();
+
+      orderList.forEach((element) {
+        element.isCampaign = true;
+        var index = basketController.basketList.indexWhere(
+            (basketElement) => basketElement.productId == element.productId);
+        if (index != -1) {
+          element.selectedCount =
+              basketController.basketList[index].selectedCount;
+        }
+      });
+
       orderList.refresh();
     } else {
       repository.showMessage(
@@ -138,6 +163,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       subCategories.value = response.data;
       if (response.data.isNotEmpty) {
         selectedSubCategory.value = response.data.first;
+      } else {
+        selectedSubCategory.value = null;
       }
       await getListOrders();
     } else {
@@ -150,8 +177,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   updateProductCount({required OrderList product, required bool isAdd}) async {
     var basketController = Get.find<BasketController>();
-    var index = orderList
-        .indexWhere((element) => element.productId == product.productId);
+    var index = orderList.indexWhere((element) =>
+        element.productId == product.productId || element.id == product.id);
     if (isAdd) {
       orderList[index].selectedCount++;
     } else {

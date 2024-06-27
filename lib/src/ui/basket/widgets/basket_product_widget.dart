@@ -41,6 +41,7 @@ class BasketProductWidget extends GetWidget<BasketController> {
                     'productId': product.productId,
                     'selectedCount': 1,
                     'availableProductCount': 30,
+                    'listId': product.productListId,
                   },
                 );
               },
@@ -84,28 +85,37 @@ class BasketProductWidget extends GetWidget<BasketController> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              color: primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: "${product.discountedListPrice}\$",
-                              ),
-                              TextSpan(
-                                text:
-                                    " + ${controller.kdvProducts.firstWhere((value) {
-                                  return (value.id == product.productId);
-                                }).kdv}\$",
-                                style: const TextStyle(
-                                  color: lightTextColor,
+                        GetBuilder<BasketController>(
+                            id: "basketList",
+                            builder: (controller) {
+                              return RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          "${product.discountedListPrice * controller.basketList.firstWhere(
+                                                (element) =>
+                                                    element.productId ==
+                                                    product.productId,
+                                              ).selectedCount} tl",
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          " + ${controller.kdvProducts.firstWhere((value) {
+                                        return (value.id == product.productId);
+                                      }).kdv} tl",
+                                      style: const TextStyle(
+                                        color: lightTextColor,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
+                              );
+                            })
                       ],
                     ),
                   ),

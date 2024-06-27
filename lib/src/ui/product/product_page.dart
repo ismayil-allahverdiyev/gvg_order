@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gvg_order/src/controllers/product/product_controller.dart';
@@ -112,6 +113,44 @@ class ProductPage extends GetView<ProductController> {
                       } else {
                         return const SizedBox();
                       }
+                    },
+                  ),
+                  Obx(
+                    () {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount:
+                            controller.productDetail.value?.products?.length ??
+                                0,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              controller.productDetail.value?.products?[index]
+                                      .productName ??
+                                  "",
+                              style: const TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            subtitle: Text(
+                              controller.productDetail.value?.products?[index]
+                                      .brandName ??
+                                  "",
+                              style: const TextStyle(
+                                color: lightTextColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            // leading: CachedNetworkImage(
+
+                            // ),
+                          );
+                        },
+                      );
                     },
                   ),
                 ],

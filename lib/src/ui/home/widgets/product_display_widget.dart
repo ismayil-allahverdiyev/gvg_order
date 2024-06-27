@@ -30,6 +30,7 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
           'selectedCount': 0,
           'availableProductCount': 30,
           'isCampaign': isCampaign,
+          'listId': order.productListId,
         },
       ),
       child: Column(

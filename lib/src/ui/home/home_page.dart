@@ -28,30 +28,34 @@ class HomePage extends GetView<HomeController> {
             SliverAppBar(
               toolbarHeight: kToolbarHeight,
               leading: const SizedBox(),
-              flexibleSpace: DefaultTabController(
-                length: 2,
-                child: TabBar(
-                  dividerColor: Colors.transparent,
-                  labelColor: whiteColor,
-                  unselectedLabelColor: whiteColor,
-                  indicatorColor: Color.fromARGB(255, 206, 193, 233),
-                  onTap: (value) async {
-                    controller.selectedTab.value = value;
-                    if (value == 0) {
-                      await controller.getListOrders();
-                    } else {
-                      await controller.getCampaigns();
-                    }
-                  },
-                  tabs: [
-                    Tab(
-                      text: "Products",
-                    ),
-                    Tab(
-                      text: "Campaigns",
-                    ),
-                  ],
-                ),
+              flexibleSpace: Obx(
+                () {
+                  return controller.tabController.value == null
+                      ? const SizedBox()
+                      : TabBar(
+                          dividerColor: Colors.transparent,
+                          labelColor: whiteColor,
+                          unselectedLabelColor: whiteColor,
+                          controller: controller.tabController.value!,
+                          indicatorColor: Color.fromARGB(255, 206, 193, 233),
+                          onTap: (value) async {
+                            controller.selectedTab.value = value;
+                            if (value == 0) {
+                              await controller.getListOrders();
+                            } else {
+                              await controller.getCampaigns();
+                            }
+                          },
+                          tabs: [
+                            Tab(
+                              text: "Products",
+                            ),
+                            Tab(
+                              text: "Campaigns",
+                            ),
+                          ],
+                        );
+                },
               ),
             ),
             Obx(() {

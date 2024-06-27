@@ -44,6 +44,7 @@ class BasketController extends GetxController {
               current.selectedCount,
     );
     print(basketList);
+
     update(["basketList"]);
 
     getTemporaryCardInfo();
@@ -59,7 +60,7 @@ class BasketController extends GetxController {
             return {
               "id": e.productId,
               "listId": e.productListId,
-              "isCampaign": false,
+              "isCampaign": e.isCampaign,
               "amount": e.selectedCount,
             };
           },
@@ -75,8 +76,8 @@ class BasketController extends GetxController {
 
       kdvProducts.forEach(
         (element) {
-          kdvTotal.value += element.price * element.amount;
-          justKdvTotal.value += element.kdv * element.amount;
+          kdvTotal.value += element.price;
+          justKdvTotal.value += element.kdv;
         },
       );
     } else {

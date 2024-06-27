@@ -82,25 +82,27 @@ class CampaignDetail {
     required this.customerId,
   });
 
-  factory CampaignDetail.fromJson(Map<String, dynamic> json) => CampaignDetail(
-        products: List<Product>.from(
-            json["products"].map((x) => Product.fromJson(x))),
-        campaignId: json["campaignId"],
-        typeId: json["typeId"],
-        productListId: json["productListId"],
-        name: json["name"],
-        stock: json["stock"],
-        beginDate: DateTime.parse(json["beginDate"]),
-        endDate: DateTime.parse(json["endDate"]),
-        message: json["message"],
-        discountedPrice: json["discountedPrice"],
-        logo: json["logo"],
-        fileWithModels:
-            List<dynamic>.from(json["fileWithModels"].map((x) => x)),
-        deletedFileName: json["deletedFileName"],
-        userId: json["userId"],
-        customerId: json["customerId"],
-      );
+  factory CampaignDetail.fromJson(Map<String, dynamic> json) {
+    var res = json;
+    return CampaignDetail(
+      products:
+          List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
+      campaignId: json["campaignId"],
+      typeId: json["typeId"],
+      productListId: json["productListId"],
+      name: json["name"],
+      stock: json["stock"],
+      beginDate: DateTime.parse(json["beginDate"]),
+      endDate: DateTime.parse(json["endDate"]),
+      message: json["message"],
+      discountedPrice: json["discountedPrice"],
+      logo: json["logo"],
+      fileWithModels: List<dynamic>.from(json["fileWithModels"].map((x) => x)),
+      deletedFileName: json["deletedFileName"],
+      userId: json["userId"],
+      customerId: json["customerId"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
@@ -148,20 +150,23 @@ class Product {
     required this.userId,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-        productId: json["productId"],
-        productName: json["productName"],
-        stockKode: json["stockKode"],
-        parentCategoryName: json["parentCategoryName"],
-        subCategoryName: json["subCategoryName"],
-        brandName: json["brandName"],
-        productListProductId: json["productListProductId"],
-        fileWithModel: List<dynamic>.from(json["fileWithModel"].map((x) => x)),
-        productListInfo: List<ProductListInfo>.from(
-            json["productListInfo"].map((x) => ProductListInfo.fromJson(x))),
-        customerId: json["customerId"],
-        userId: json["userId"],
-      );
+  factory Product.fromJson(Map<String, dynamic> json) {
+    var res = json;
+    return Product(
+      productId: json["productId"],
+      productName: json["productName"],
+      stockKode: json["stockKode"],
+      parentCategoryName: json["parentCategoryName"],
+      subCategoryName: json["subCategoryName"],
+      brandName: json["brandName"],
+      productListProductId: json["productListProductId"],
+      fileWithModel: List<dynamic>.from(json["fileWithModel"].map((x) => x)),
+      productListInfo: List<ProductListInfo>.from(
+          json["productListInfo"].map((x) => ProductListInfo.fromJson(x))),
+      customerId: json["customerId"],
+      userId: json["userId"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "productId": productId,
@@ -208,21 +213,23 @@ class ProductListInfo {
     required this.userId,
   });
 
-  factory ProductListInfo.fromJson(Map<String, dynamic> json) =>
-      ProductListInfo(
-        listPrice: json["listPrice"],
-        productId: json["productId"],
-        productListId: json["productListId"],
-        productListName: json["productListName"],
-        quantity: json["quantity"],
-        newListPrice: json["newListPrice"],
-        campaignQuantity: json["campaignQuantity"],
-        piecesInBox: json["piecesInBox"],
-        kdv: json["kdv"],
-        isActive: json["isActive"],
-        customerId: json["customerId"],
-        userId: json["userId"],
-      );
+  factory ProductListInfo.fromJson(Map<String, dynamic> json) {
+    var res = json;
+    return ProductListInfo(
+      listPrice: json["listPrice"],
+      productId: json["productId"],
+      productListId: json["productListId"],
+      productListName: json["productListName"],
+      quantity: json["quantity"],
+      newListPrice: json["newListPrice"] ?? json["listPrice"],
+      campaignQuantity: json["campaignQuantity"],
+      piecesInBox: json["piecesInBox"],
+      kdv: json["kdv"],
+      isActive: json["isActive"],
+      customerId: json["customerId"],
+      userId: json["userId"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "listPrice": listPrice,

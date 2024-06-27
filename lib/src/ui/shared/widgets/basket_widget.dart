@@ -49,7 +49,7 @@ class BasketWidget extends GetWidget<BasketController> {
                     child: Obx(
                       () {
                         return Text(
-                          '${controller.total.value > 1000 ? "${controller.total.value}..." : controller.total.value} tl',
+                          '${controller.total.value > 10000 ? "${controller.total.value.toString().substring(0, 4)}..." : controller.total.value} tl',
                           style: const TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,

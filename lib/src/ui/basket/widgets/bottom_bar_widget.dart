@@ -35,7 +35,7 @@ class BottomBarWidget extends GetWidget<BasketController> {
                 Obx(
                   () {
                     return Text(
-                      "${controller.kdvTotal.value.toStringAsFixed(2)}\$",
+                      "${(controller.kdvTotal.value + controller.justKdvTotal.value).toStringAsFixed(2)}\$",
                       style: const TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,

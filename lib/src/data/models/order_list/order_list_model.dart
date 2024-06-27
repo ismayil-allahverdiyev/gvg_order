@@ -24,18 +24,21 @@ class OrderListModel {
     required this.data,
   });
 
-  factory OrderListModel.fromJson(Map<String, dynamic> json) => OrderListModel(
-        code: json["code"],
-        status: json["status"],
-        statusText: json["statusText"],
-        message: json["message"],
-        rowCount: json["rowCount"] ?? 0,
-        totalCount: json["totalCount"] ?? 0,
-        data: json["data"] == null
-            ? []
-            : List<OrderList>.from(
-                json["data"].map((x) => OrderList.fromJson(x))),
-      );
+  factory OrderListModel.fromJson(Map<String, dynamic> json) {
+    var res = json;
+    return OrderListModel(
+      code: json["code"],
+      status: json["status"],
+      statusText: json["statusText"],
+      message: json["message"],
+      rowCount: json["rowCount"] ?? 0,
+      totalCount: json["totalCount"] ?? 0,
+      data: json["data"] == null
+          ? []
+          : List<OrderList>.from(
+              json["data"].map((x) => OrderList.fromJson(x))),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "code": code,
@@ -56,12 +59,13 @@ class OrderList {
   String productListId;
   String productName;
   int stockQuantity;
-  int piecesInBox;
+  int? piecesInBox;
   int listPrice;
   int discountedListPrice;
   int selectedCount = 0;
   String? typeId;
   int discountedPrice;
+  bool isCampaign = false;
 
   OrderList({
     required this.id,
@@ -81,13 +85,19 @@ class OrderList {
     var res = json;
     return OrderList(
       id: json["id"],
-      productId: json["productId"],
+      productId: json["productId"] ?? json["id"],
       productListId: json["productListId"],
       productName: json["productName"] ?? json["name"],
       stockQuantity: json["stockQuantity"] ?? json["stock"],
       piecesInBox: json["piecesInBox"],
-      listPrice: json["listPrice"],
-      discountedListPrice: json["discountedListPrice"] ?? json["listPrice"],
+      listPrice: json["listPrice"] ??
+          json["discountedListPrice"] ??
+          json["discountedPrice"] ??
+          0,
+      discountedListPrice: json["discountedListPrice"] ??
+          json["listPrice"] ??
+          json["discountedPrice"] ??
+          0,
       selectedCount: json["selectedCount"] ?? 0,
       typeId: json["typeId"],
       discountedPrice: json["discountedPrice"] ?? 0,
