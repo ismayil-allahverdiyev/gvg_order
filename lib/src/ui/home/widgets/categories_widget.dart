@@ -16,6 +16,7 @@ class CategoriesWidget extends GetWidget<HomeController> {
           length: controller.parentCategories.length,
           child: Container(
             color: whiteColor,
+            width: Get.width,
             child: TabBar(
               indicator: const BoxDecoration(),
               indicatorColor: Colors.transparent,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gvg_order/src/constants/endpoints.dart';
+import 'package:gvg_order/src/data/models/image_file/image_file_model.dart';
 import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import '../../data/models/parent_categories/parent_categories_model.dart';
 import '../../data/models/sub_categories/sub_categories_model.dart';
@@ -10,6 +11,8 @@ import '../basket/basket_controller.dart';
 class HomeController extends GetxController with GetTickerProviderStateMixin {
   final Repository repository;
   HomeController({required this.repository});
+
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   var outletId = "";
   var outletName = "";
@@ -78,10 +81,36 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       });
 
       orderList.refresh();
+
+      orderList.forEach((element) async {
+        element.imageFile = await getFile(orderList: element);
+        orderList.refresh();
+      });
     } else {
       repository.showMessage(
         title: "Error",
         message: response.message,
+      );
+    }
+  }
+
+  getFile({required OrderList orderList}) async {
+    var res = imageFileModelFromJson(
+      await repository.getData(
+          endpoint: EndPoint.getFile,
+          base: EndPoint.base_url_product,
+          query: {
+            "folder": orderList.isCampaign ? "campaign" : "product",
+            "fileName": orderList.productId,
+          }),
+    );
+
+    if (res.code == 200) {
+      return res.data;
+    } else {
+      repository.showMessage(
+        title: "Error",
+        message: res.message,
       );
     }
   }
@@ -117,6 +146,17 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       });
 
       orderList.refresh();
+
+      orderList.forEach((element) async {
+        element.imageFile = await getFile(orderList: element);
+      });
+
+      orderList.refresh();
+
+      orderList.forEach((element) async {
+        element.imageFile = await getFile(orderList: element);
+        orderList.refresh();
+      });
     } else {
       repository.showMessage(
         title: "Error",
@@ -177,8 +217,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   updateProductCount({required OrderList product, required bool isAdd}) async {
     var basketController = Get.find<BasketController>();
-    var index = orderList.indexWhere((element) =>
-        element.productId == product.productId || element.id == product.id);
+    var index = orderList
+        .indexWhere((element) => element.productId == product.productId);
     if (isAdd) {
       orderList[index].selectedCount++;
     } else {

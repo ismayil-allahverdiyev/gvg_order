@@ -6,6 +6,7 @@ import 'package:gvg_order/src/routes/app_routes.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
 import 'widgets/basket_product_widget.dart';
 import 'widgets/bottom_bar_widget.dart';
+import 'widgets/custom_basket_dialog.dart';
 
 class BasketPage extends GetView<BasketController> {
   const BasketPage({super.key});
@@ -55,6 +56,7 @@ class BasketPage extends GetView<BasketController> {
                     key: ValueKey(controller.basketList[index].productId),
                     product: controller.basketList[index],
                     isLast: index == controller.basketList.length - 1,
+                    index: index,
                   ),
                 );
               },
@@ -63,10 +65,8 @@ class BasketPage extends GetView<BasketController> {
           Obx(
             () {
               return Text(
-                "Tostal KDV: " +
-                    controller.justKdvTotal.value.toStringAsFixed(2) +
-                    '\$',
-                style: TextStyle(
+                "Tostal KDV: ${controller.justKdvTotal.value.toStringAsFixed(2)}\$",
+                style: const TextStyle(
                   color: lightTextColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -76,7 +76,11 @@ class BasketPage extends GetView<BasketController> {
           ),
           const Divider(),
           BottomBarWidget(
-            onPressed: () => Get.toNamed(Routes.PAYMENT),
+            onPressed: () {
+              Get.dialog(
+                const CustomBasketDialog(),
+              );
+            },
           )
         ],
       ),

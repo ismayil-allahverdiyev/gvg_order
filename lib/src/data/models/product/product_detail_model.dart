@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:gvg_order/src/data/models/campaign/campaign_detail.dart';
+import 'package:gvg_order/src/data/models/image_file/image_file_model.dart';
 
 ProductDetailModel productDetailModelFromJson(String str) =>
     ProductDetailModel.fromJson(json.decode(str));
@@ -53,9 +54,8 @@ class ProductData {
   String id;
   String productListId;
   String productName;
-  int stockQuantity;
-  int listPrice;
-  int discountedListPrice;
+  double listPrice;
+  double discountedListPrice;
   String? description1;
   String? description2;
   String? description3;
@@ -63,12 +63,12 @@ class ProductData {
   String brandName;
   bool isFavorite;
   List<Product>? products;
+  ImageFile? imageFile;
 
   ProductData({
     required this.id,
     required this.productListId,
     required this.productName,
-    required this.stockQuantity,
     required this.listPrice,
     required this.discountedListPrice,
     required this.description1,
@@ -78,6 +78,7 @@ class ProductData {
     required this.brandName,
     required this.isFavorite,
     this.products,
+    this.imageFile,
   });
 
   factory ProductData.fromJson(Map<String, dynamic> json) {
@@ -86,7 +87,6 @@ class ProductData {
       id: json["id"],
       productListId: json["productListId"],
       productName: json["productName"],
-      stockQuantity: json["stockQuantity"],
       listPrice: json["listPrice"],
       discountedListPrice: json["discountedListPrice"] ?? json["listPrice"],
       description1: json["description1"],
@@ -102,7 +102,6 @@ class ProductData {
         "id": id,
         "productListId": productListId,
         "productName": productName,
-        "stockQuantity": stockQuantity,
         "listPrice": listPrice,
         "discountedListPrice": discountedListPrice,
         "description1": description1,

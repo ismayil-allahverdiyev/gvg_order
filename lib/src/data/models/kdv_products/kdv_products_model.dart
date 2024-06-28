@@ -55,7 +55,6 @@ class KdvProduct {
   int amount;
   double kdv;
   double price;
-  int stock;
   String name;
 
   KdvProduct({
@@ -65,7 +64,6 @@ class KdvProduct {
     required this.amount,
     required this.kdv,
     required this.price,
-    required this.stock,
     required this.name,
   });
 
@@ -76,7 +74,6 @@ class KdvProduct {
         amount: json["amount"],
         kdv: json["kdv"]?.toDouble(),
         price: json["price"].toDouble(),
-        stock: json["stock"],
         name: json["name"],
       );
 
@@ -87,7 +84,6 @@ class KdvProduct {
         "amount": amount,
         "kdv": kdv,
         "price": price,
-        "stock": stock,
         "name": name,
       };
 }

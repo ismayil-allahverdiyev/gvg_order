@@ -1,5 +1,10 @@
 class EndPoint {
-  static const base_url_product = "http://185.46.55.50:7131/api/";
+  // static const base_url_product = "http://185.46.55.50:7131/api/";
+  static const base_url_product =
+      "https://test-api-gateway.geovisiongroup.com/product/api/";
+
+  static const base_url_order =
+      "https://test-api-gateway.geovisiongroup.com/order/api/";
 
   static const get_outlet_list_gvg = "mobile/get-outlet-list-gvg";
 
@@ -20,4 +25,10 @@ class EndPoint {
   static const getCampaign = "mobile/get-campaign";
 
   static const getCampaigns = "mobile/get-campaigns";
+
+  static const getFile = "add-range/get-file";
+
+  static const cardInfo = "mobile/card-info";
+
+  static const cards = "mobile/cards";
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:gvg_order/src/data/models/image_file/image_file_model.dart';
+
 OrderListModel orderListModelFromJson(String str) =>
     OrderListModel.fromJson(json.decode(str));
 
@@ -58,21 +60,20 @@ class OrderList {
   String? productId;
   String productListId;
   String productName;
-  int stockQuantity;
   int? piecesInBox;
-  int listPrice;
-  int discountedListPrice;
+  double listPrice;
+  double discountedListPrice;
   int selectedCount = 0;
   String? typeId;
-  int discountedPrice;
+  double discountedPrice;
   bool isCampaign = false;
+  ImageFile? imageFile;
 
   OrderList({
     required this.id,
     required this.productId,
     required this.productListId,
     required this.productName,
-    required this.stockQuantity,
     required this.piecesInBox,
     required this.listPrice,
     required this.discountedListPrice,
@@ -88,7 +89,6 @@ class OrderList {
       productId: json["productId"] ?? json["id"],
       productListId: json["productListId"],
       productName: json["productName"] ?? json["name"],
-      stockQuantity: json["stockQuantity"] ?? json["stock"],
       piecesInBox: json["piecesInBox"],
       listPrice: json["listPrice"] ??
           json["discountedListPrice"] ??
@@ -109,12 +109,12 @@ class OrderList {
         "productId": productId,
         "productListId": productListId,
         "productName": productName,
-        "stockQuantity": stockQuantity,
         "piecesInBox": piecesInBox,
         "listPrice": listPrice,
         "discountedListPrice": discountedListPrice,
         "selectedCount": selectedCount,
         "typeId": typeId,
         "discountedPrice": discountedPrice,
+        "imageFile": imageFile?.toJson() ?? "",
       };
 }

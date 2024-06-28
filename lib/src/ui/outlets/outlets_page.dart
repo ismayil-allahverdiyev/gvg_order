@@ -22,9 +22,21 @@ class OutletsPage extends GetView<OutletsController> {
             child: TabBarView(
               controller: controller.tabController!,
               physics: const NeverScrollableScrollPhysics(),
-              children: const [
-                OutletsWidget(),
-                ListsWidget(),
+              children: [
+                OutletsWidget(
+                  onTap: (int index) {
+                    controller.selectedOutletId.value =
+                        controller.outlistList[index].id;
+                    controller.selectedOutletName.value =
+                        controller.outlistList[index].properties.sigNName;
+
+                    controller.getLists();
+
+                    controller.tabController!.animateTo(1);
+                  },
+                  outlistList: controller.outlistList,
+                ),
+                const ListsWidget(),
               ],
             ),
           ),

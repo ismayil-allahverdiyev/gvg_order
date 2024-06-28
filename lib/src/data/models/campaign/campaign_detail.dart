@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../image_file/image_file_model.dart';
+
 CampaignDetailModel campaignDetailModelFromJson(String str) =>
     CampaignDetailModel.fromJson(json.decode(str));
 
@@ -53,11 +55,10 @@ class CampaignDetail {
   String typeId;
   String productListId;
   String name;
-  int stock;
   DateTime beginDate;
   DateTime endDate;
   String message;
-  int discountedPrice;
+  double discountedPrice;
   dynamic logo;
   List<dynamic> fileWithModels;
   String deletedFileName;
@@ -70,7 +71,6 @@ class CampaignDetail {
     required this.typeId,
     required this.productListId,
     required this.name,
-    required this.stock,
     required this.beginDate,
     required this.endDate,
     required this.message,
@@ -91,7 +91,6 @@ class CampaignDetail {
       typeId: json["typeId"],
       productListId: json["productListId"],
       name: json["name"],
-      stock: json["stock"],
       beginDate: DateTime.parse(json["beginDate"]),
       endDate: DateTime.parse(json["endDate"]),
       message: json["message"],
@@ -110,7 +109,6 @@ class CampaignDetail {
         "typeId": typeId,
         "productListId": productListId,
         "name": name,
-        "stock": stock,
         "beginDate": beginDate.toIso8601String(),
         "endDate": endDate.toIso8601String(),
         "message": message,
@@ -126,7 +124,6 @@ class CampaignDetail {
 class Product {
   String productId;
   String productName;
-  String stockKode;
   String parentCategoryName;
   String subCategoryName;
   String brandName;
@@ -135,11 +132,11 @@ class Product {
   List<ProductListInfo> productListInfo;
   String? customerId;
   String? userId;
+  ImageFile? imageFile;
 
   Product({
     required this.productId,
     required this.productName,
-    required this.stockKode,
     required this.parentCategoryName,
     required this.subCategoryName,
     required this.brandName,
@@ -148,6 +145,7 @@ class Product {
     required this.productListInfo,
     required this.customerId,
     required this.userId,
+    this.imageFile,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -155,7 +153,6 @@ class Product {
     return Product(
       productId: json["productId"],
       productName: json["productName"],
-      stockKode: json["stockKode"],
       parentCategoryName: json["parentCategoryName"],
       subCategoryName: json["subCategoryName"],
       brandName: json["brandName"],
@@ -171,7 +168,6 @@ class Product {
   Map<String, dynamic> toJson() => {
         "productId": productId,
         "productName": productName,
-        "stockKode": stockKode,
         "parentCategoryName": parentCategoryName,
         "subCategoryName": subCategoryName,
         "brandName": brandName,
@@ -181,29 +177,29 @@ class Product {
             List<dynamic>.from(productListInfo.map((x) => x.toJson())),
         "customerId": customerId,
         "userId": userId,
+        "imageFile": imageFile?.toJson(),
       };
 }
 
 class ProductListInfo {
-  int listPrice;
+  double listPrice;
   String productId;
   String productListId;
   String productListName;
-  int quantity;
-  int newListPrice;
+  double newListPrice;
   int campaignQuantity;
   dynamic piecesInBox;
   dynamic kdv;
   dynamic isActive;
   String? customerId;
   String? userId;
+  ImageFile? imageFile;
 
   ProductListInfo({
     required this.listPrice,
     required this.productId,
     required this.productListId,
     required this.productListName,
-    required this.quantity,
     required this.newListPrice,
     required this.campaignQuantity,
     required this.piecesInBox,
@@ -211,6 +207,7 @@ class ProductListInfo {
     required this.isActive,
     required this.customerId,
     required this.userId,
+    this.imageFile,
   });
 
   factory ProductListInfo.fromJson(Map<String, dynamic> json) {
@@ -220,7 +217,6 @@ class ProductListInfo {
       productId: json["productId"],
       productListId: json["productListId"],
       productListName: json["productListName"],
-      quantity: json["quantity"],
       newListPrice: json["newListPrice"] ?? json["listPrice"],
       campaignQuantity: json["campaignQuantity"],
       piecesInBox: json["piecesInBox"],
@@ -236,7 +232,6 @@ class ProductListInfo {
         "productId": productId,
         "productListId": productListId,
         "productListName": productListName,
-        "quantity": quantity,
         "newListPrice": newListPrice,
         "campaignQuantity": campaignQuantity,
         "piecesInBox": piecesInBox,
@@ -244,5 +239,6 @@ class ProductListInfo {
         "isActive": isActive,
         "customerId": customerId,
         "userId": userId,
+        "imageFile": imageFile?.toJson(),
       };
 }

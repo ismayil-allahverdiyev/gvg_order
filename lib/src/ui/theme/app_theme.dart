@@ -11,6 +11,15 @@ final ThemeData appThemeData = ThemeData(
   hintColor: greyColor,
   scaffoldBackgroundColor: Colors.grey[100],
   canvasColor: whiteColor,
+  datePickerTheme: const DatePickerThemeData(
+    backgroundColor: whiteColor,
+    inputDecorationTheme: InputDecorationTheme(
+      labelStyle: TextStyle(
+        color: textColor,
+        fontSize: 16,
+      ),
+    ),
+  ),
   // Define the default font family.
   fontFamily: FontFamily.medium,
   appBarTheme: const AppBarTheme(

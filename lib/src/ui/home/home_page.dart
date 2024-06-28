@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gvg_order/src/data/utils/device_utils.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
 import '../../controllers/home/home_controller.dart';
+import '../../routes/app_routes.dart';
 import '../shared/widgets/custom_app_bar_widget.dart';
 import 'widgets/body_widget.dart';
 import 'widgets/custom_search_widget.dart';
@@ -18,9 +19,61 @@ class HomePage extends GetView<HomeController> {
         DeviceUtils.hideKeyboard(context);
       },
       child: Scaffold(
-        appBar: const CustomAppBar(
+        key: controller.scaffoldKey,
+        appBar: CustomAppBar(
           title: "Home Page",
           isBasketVisible: true,
+          isBackButton: false,
+          onPressed: () {
+            controller.scaffoldKey.currentState!.openDrawer();
+          },
+        ),
+        drawer: Container(
+          width: Get.width * 0.7,
+          color: whiteColor,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                DrawerWidget(
+                  title: "Previous orders",
+                  onTap: () {
+                    Get.toNamed(Routes.ORDERS);
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                DrawerWidget(
+                  title: "Favourites",
+                  onTap: () {
+                    Get.toNamed(Routes.FAVOURITES);
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                DrawerWidget(
+                  title: "Outlet",
+                  onTap: () {
+                    Get.back();
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                DrawerWidget(
+                  title: "Logout",
+                  onTap: () {
+                    // controller.logout();
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
         backgroundColor: whiteColor,
         body: CustomScrollView(
@@ -84,6 +137,50 @@ class HomePage extends GetView<HomeController> {
             const GeneralCategoriesWidget(),
             const BodyWidget(),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class DrawerWidget extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+  const DrawerWidget({
+    super.key,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: lightGreyColor,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: lightTextColor,
+                  fontSize: 16,
+                ),
+              ),
+              const Spacer(),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: lightTextColor,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/constants/assets.dart';
 import 'package:gvg_order/src/controllers/product/product_controller.dart';
 import 'package:gvg_order/src/ui/shared/widgets/custom_app_bar_widget.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
@@ -25,7 +26,7 @@ class ProductPage extends GetView<ProductController> {
           ProductImageWidget(productId: controller.productId),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 0, 0),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: ListView(
                 children: [
                   Obx(
@@ -117,14 +118,26 @@ class ProductPage extends GetView<ProductController> {
                   ),
                   Obx(
                     () {
-                      return ListView.builder(
+                      return ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount:
                             controller.productDetail.value?.products?.length ??
                                 0,
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            height: 8,
+                          );
+                        },
                         itemBuilder: (context, index) {
                           return ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                color: lightGreyColor,
+                                width: 1,
+                              ),
+                            ),
                             title: Text(
                               controller.productDetail.value?.products?[index]
                                       .productName ??
@@ -145,9 +158,38 @@ class ProductPage extends GetView<ProductController> {
                                 fontSize: 16,
                               ),
                             ),
-                            // leading: CachedNetworkImage(
-
-                            // ),
+                            leading: Obx(
+                              () {
+                                return Container(
+                                  width: Get.width * 0.1,
+                                  height: Get.width * 0.1,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: controller
+                                                .productDetail
+                                                .value
+                                                ?.products?[index]
+                                                .imageFile
+                                                ?.image ==
+                                            null
+                                        ? const DecorationImage(
+                                            image: AssetImage(
+                                              Assets.image_placeholder,
+                                            ),
+                                          )
+                                        : DecorationImage(
+                                            image: controller
+                                                .productDetail
+                                                .value!
+                                                .products![index]
+                                                .imageFile!
+                                                .image!
+                                                .image,
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         },
                       );

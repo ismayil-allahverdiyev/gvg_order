@@ -10,9 +10,11 @@ import 'package:gvg_order/src/ui/coupon/coupon_page.dart';
 import 'package:gvg_order/src/ui/outlets/outlets_page.dart';
 import '../bindings/app/app_bindings.dart';
 import '../bindings/home/home_bindings.dart';
+import '../bindings/orders/orders_bindings.dart';
 import '../ui/app.dart';
 import '../ui/home/home_page.dart';
 import '../ui/login/login_page.dart';
+import '../ui/orders/orders_page.dart';
 import '../ui/payment/payment_page.dart';
 import '../ui/product/product_page.dart';
 import 'app_routes.dart';
@@ -58,6 +60,11 @@ class AppPages {
       name: Routes.OUTLETS,
       page: () => const OutletsPage(),
       binding: OutletsBindings(),
+    ),
+    GetPage(
+      name: Routes.ORDERS,
+      page: () => const OrdersPage(),
+      binding: OrdersBindings(),
     ),
   ];
 }

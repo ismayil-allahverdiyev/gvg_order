@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
+import '../../../constants/assets.dart';
 import '../../../controllers/basket/basket_controller.dart';
 import '../../../routes/app_routes.dart';
 import '../../shared/widgets/custom_progress_indicator_widget.dart';
@@ -10,11 +11,13 @@ import 'background_widget.dart';
 
 class BasketProductWidget extends GetWidget<BasketController> {
   final OrderList product;
+  final int index;
   final bool isLast;
   const BasketProductWidget({
     super.key,
     required this.product,
     required this.isLast,
+    required this.index,
   });
 
   @override
@@ -47,10 +50,8 @@ class BasketProductWidget extends GetWidget<BasketController> {
               },
               child: Row(
                 children: [
-                  CachedNetworkImage(
-                    imageUrl:
-                        "https://media.istockphoto.com/id/458464735/tr/foto%C4%9Fraf/coke.jpg?s=2048x2048&w=is&k=20&c=DpnH4v1YRs4l1rmzu-xFi3wRjK44FUTYQBD8FJTwHx0=",
-                    imageBuilder: (context, imageProvider) => Container(
+                  Obx(() {
+                    return Container(
                       width: Get.width * 0.2,
                       height: Get.width * 0.2,
                       decoration: BoxDecoration(
@@ -58,16 +59,44 @@ class BasketProductWidget extends GetWidget<BasketController> {
                         border: Border.all(
                           color: lightGreyColor,
                         ),
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
+                        image: controller.basketList[index].imageFile == null ||
+                                controller.basketList[index].imageFile!.image ==
+                                    null
+                            ? const DecorationImage(
+                                image: AssetImage(
+                                  Assets.image_placeholder,
+                                ),
+                                scale: 5,
+                              )
+                            : DecorationImage(
+                                image: controller
+                                    .basketList[index].imageFile!.image!.image,
+                                fit: BoxFit.cover,
+                              ),
                       ),
-                    ),
-                    placeholder: (context, url) => const PlaceHolderWidget(),
-                    errorWidget: (context, url, error) =>
-                        const PlaceHolderWidget(),
-                  ),
+                    );
+                  }),
+                  // CachedNetworkImage(
+                  //   imageUrl:
+                  //       "https://media.istockphoto.com/id/458464735/tr/foto%C4%9Fraf/coke.jpg?s=2048x2048&w=is&k=20&c=DpnH4v1YRs4l1rmzu-xFi3wRjK44FUTYQBD8FJTwHx0=",
+                  //   imageBuilder: (context, imageProvider) => Container(
+                  //     width: Get.width * 0.2,
+                  //     height: Get.width * 0.2,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(8),
+                  //       border: Border.all(
+                  //         color: lightGreyColor,
+                  //       ),
+                  //       image: DecorationImage(
+                  //         image: imageProvider,
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  //   placeholder: (context, url) => const PlaceHolderWidget(),
+                  //   errorWidget: (context, url, error) =>
+                  //       const PlaceHolderWidget(),
+                  // ),
                   const SizedBox(
                     width: 12,
                   ),
@@ -97,17 +126,11 @@ class BasketProductWidget extends GetWidget<BasketController> {
                                   children: [
                                     TextSpan(
                                       text:
-                                          "${product.discountedListPrice * controller.basketList.firstWhere(
-                                                (element) =>
-                                                    element.productId ==
-                                                    product.productId,
-                                              ).selectedCount} tl",
+                                          "${product.discountedListPrice * controller.basketList[index].selectedCount} tl",
                                     ),
                                     TextSpan(
                                       text:
-                                          " + ${controller.kdvProducts.firstWhere((value) {
-                                        return (value.id == product.productId);
-                                      }).kdv} tl",
+                                          " + ${controller.kdvProducts[index].kdv} tl",
                                       style: const TextStyle(
                                         color: lightTextColor,
                                       ),
@@ -153,13 +176,7 @@ class BasketProductWidget extends GetWidget<BasketController> {
                                 id: "basketList",
                                 builder: (controller) {
                                   return Text(
-                                    controller.basketList
-                                        .firstWhere(
-                                          (element) =>
-                                              element.productId ==
-                                              product.productId,
-                                        )
-                                        .selectedCount
+                                    controller.basketList[index].selectedCount
                                         .toString(),
                                     style: const TextStyle(
                                       color: primaryColor,

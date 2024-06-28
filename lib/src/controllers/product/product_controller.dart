@@ -4,6 +4,7 @@ import 'package:gvg_order/src/data/models/campaign/campaign_detail.dart';
 import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import 'package:gvg_order/src/data/models/product/product_detail_model.dart';
 import '../../constants/endpoints.dart';
+import '../../data/models/image_file/image_file_model.dart';
 import '../../data/repository/repository.dart';
 import '../basket/basket_controller.dart';
 
@@ -48,36 +49,28 @@ class ProductController extends GetxController {
   }
 
   addToBasket() {
-    if (selectedCount.value < availableProductCount) {
-      selectedCount.value++;
+    selectedCount.value++;
 
-      basketController!.editBasketList(
-        orderList: OrderList(
-          discountedListPrice: productDetail.value!.discountedListPrice,
-          listPrice: productDetail.value!.listPrice,
-          productId: productDetail.value!.id,
-          productName: productDetail.value!.productName,
-          productListId: productDetail.value!.productListId,
-          stockQuantity: productDetail.value!.stockQuantity,
-          selectedCount: selectedCount.value,
-          id: productDetail.value!.id,
-          piecesInBox: 0,
-        ),
-      );
+    basketController!.editBasketList(
+      orderList: OrderList(
+        discountedListPrice: productDetail.value!.discountedListPrice,
+        listPrice: productDetail.value!.listPrice,
+        productId: productDetail.value!.id,
+        productName: productDetail.value!.productName,
+        productListId: productDetail.value!.productListId,
+        selectedCount: selectedCount.value,
+        id: productDetail.value!.id,
+        piecesInBox: 0,
+      ),
+    );
 
-      homeController!.orderList.forEach((element) {
-        if (element.productId == productDetail.value!.id) {
-          element.selectedCount = selectedCount.value;
-        }
-      });
+    homeController!.orderList.forEach((element) {
+      if (element.productId == productDetail.value!.id) {
+        element.selectedCount = selectedCount.value;
+      }
+    });
 
-      homeController!.update(["orderList"]);
-    } else {
-      repository.showMessage(
-        title: "Quota restriction",
-        message: "There are no more products available in the stock!",
-      );
-    }
+    homeController!.update(["orderList"]);
   }
 
   removeFromBasket() {
@@ -90,7 +83,6 @@ class ProductController extends GetxController {
         productId: productDetail.value!.id,
         productName: productDetail.value!.productName,
         productListId: productDetail.value!.productListId,
-        stockQuantity: productDetail.value!.stockQuantity,
         selectedCount: selectedCount.value,
         id: productDetail.value!.id,
         piecesInBox: 0,
@@ -111,6 +103,11 @@ class ProductController extends GetxController {
     } else {
       await getProductDetail();
     }
+
+    await getFile(
+      isCampaign: isCampaign,
+      fileName: productDetail.value!.id,
+    );
   }
 
   getCampaign() async {
@@ -138,13 +135,41 @@ class ProductController extends GetxController {
         isFavorite: false,
         productName: campaignDetail.value!.name,
         productListId: campaignDetail.value!.productListId,
-        stockQuantity: campaignDetail.value!.stock,
         products: campaignDetail.value!.products,
       );
+
+      productDetail.value!.products?.forEach((element) async {
+        element.imageFile = await getFile(
+          isCampaign: true,
+          fileName: element.productId,
+        );
+      });
     } else {
       repository.showMessage(
         title: "Error",
         message: response.message,
+      );
+    }
+  }
+
+  getFile({required bool isCampaign, required fileName}) async {
+    var res = imageFileModelFromJson(
+      await repository.getData(
+          endpoint: EndPoint.getFile,
+          base: EndPoint.base_url_product,
+          query: {
+            "folder": isCampaign ? "campaign" : "product",
+            "fileName": fileName,
+          }),
+    );
+
+    if (res.code == 200) {
+      productDetail.value!.imageFile = res.data;
+      productDetail.refresh();
+    } else {
+      repository.showMessage(
+        title: "Error",
+        message: res.message,
       );
     }
   }

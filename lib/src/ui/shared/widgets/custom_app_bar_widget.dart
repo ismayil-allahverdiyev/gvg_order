@@ -6,10 +6,14 @@ import 'basket_widget.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isBasketVisible;
+  final VoidCallback? onPressed;
+  final bool isBackButton;
   const CustomAppBar({
     super.key,
     required this.title,
     required this.isBasketVisible,
+    this.onPressed,
+    this.isBackButton = true,
   });
 
   @override
@@ -20,10 +24,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
       ),
       leading: IconButton(
-        icon: const Icon(
-          Icons.menu,
+        icon: Icon(
+          isBackButton ? Icons.arrow_back_ios_new_rounded : Icons.menu,
         ),
-        onPressed: () {},
+        onPressed: onPressed ?? () => Get.back(),
       ),
       actions: isBasketVisible
           ? [

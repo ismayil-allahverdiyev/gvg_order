@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:gvg_order/src/data/models/general/general_model.dart';
 import 'package:gvg_order/src/data/models/kdv_products/kdv_products_model.dart';
 import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import '../../constants/endpoints.dart';
 import '../../data/repository/repository.dart';
+import '../home/home_controller.dart';
 
 class BasketController extends GetxController {
   final Repository repository;
@@ -13,6 +15,8 @@ class BasketController extends GetxController {
   var total = 0.0.obs;
   var kdvTotal = 0.0.obs;
   var justKdvTotal = 0.0.obs;
+
+  var selectedDate = DateTime.now().obs;
 
   @override
   void onInit() {
@@ -84,6 +88,48 @@ class BasketController extends GetxController {
       repository.showMessage(
         title: "Error",
         message: response.message,
+      );
+    }
+  }
+
+  cardInfo() async {
+    var homeController = Get.find<HomeController>();
+
+    var response = generalModelFromJson(
+      await repository.postData(
+        base: EndPoint.base_url_product,
+        endpoint: EndPoint.cardInfo,
+        object: {
+          "model": basketList.map(
+            (e) {
+              return {
+                "id": e.productId,
+                "listId": e.productListId,
+                "isCampaign": e.isCampaign,
+                "amount": e.selectedCount,
+              };
+            },
+          ).toList(),
+          "cardInfo": {
+            "plannedDueDate": selectedDate.value.toIso8601String() + "Z",
+            "outletId": homeController.outletId,
+            "outletName": homeController.outletName,
+            "isPayment": false,
+          }
+        },
+      ),
+    );
+
+    if (response.code == 200) {
+      basketList.clear();
+      total.value = 0.0;
+      kdvTotal.value = 0.0;
+      justKdvTotal.value = 0.0;
+      Get.close(2);
+    } else {
+      repository.showMessage(
+        title: "Error",
+        message: response.message ?? "",
       );
     }
   }

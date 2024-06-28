@@ -7,4 +7,6 @@ class Routes {
   static const COUPON = '/coupon';
   static const LOGIN = '/login';
   static const OUTLETS = '/outlets';
+  static const ORDERS = '/orders';
+  static const FAVOURITES = '/favourites';
 }
