@@ -23,18 +23,26 @@ class OutletsPage extends GetView<OutletsController> {
               controller: controller.tabController!,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                OutletsWidget(
-                  onTap: (int index) {
-                    controller.selectedOutletId.value =
-                        controller.outlistList[index].id;
-                    controller.selectedOutletName.value =
-                        controller.outlistList[index].properties.sigNName;
+                Obx(
+                  () {
+                    return OutletsWidget(
+                      onTap: (int index) {
+                        controller.selectedOutletId.value =
+                            controller.outlistList[index].id;
+                        controller.selectedOutletName.value =
+                            controller.outlistList[index].properties.sigNName;
 
-                    controller.getLists();
+                        controller.getLists();
 
-                    controller.tabController!.animateTo(1);
+                        controller.tabController!.animateTo(1);
+                      },
+                      outlistList: controller.outlistList.value,
+                      onChanged: (String value) {
+                        controller.getOutletList();
+                      },
+                      searchController: controller.searchController,
+                    );
                   },
-                  outlistList: controller.outlistList,
                 ),
                 const ListsWidget(),
               ],

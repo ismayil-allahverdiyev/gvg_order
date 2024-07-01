@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:gvg_order/src/routes/app_routes.dart';
 import '../../../controllers/basket/basket_controller.dart';
 import '../../theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomBarWidget extends GetWidget<BasketController> {
   final VoidCallback onPressed;
@@ -24,9 +25,9 @@ class BottomBarWidget extends GetWidget<BasketController> {
             width: Get.width / 4,
             child: Column(
               children: [
-                const Text(
-                  "Total",
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.total,
+                  style: const TextStyle(
                     color: textColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -35,7 +36,7 @@ class BottomBarWidget extends GetWidget<BasketController> {
                 Obx(
                   () {
                     return Text(
-                      "${(controller.kdvTotal.value + controller.justKdvTotal.value).toStringAsFixed(2)}\$",
+                      "${(controller.kdvTotal.value + controller.justKdvTotal.value).toStringAsFixed(2)} tl",
                       style: const TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
@@ -58,10 +59,10 @@ class BottomBarWidget extends GetWidget<BasketController> {
                     color: primaryColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      "Continue",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.continuee,
+                      style: const TextStyle(
                         color: whiteColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,

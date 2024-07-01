@@ -100,19 +100,22 @@ class Properties {
     required this.county,
   });
 
-  factory Properties.fromJson(Map<String, dynamic> json) => Properties(
-        coordinatEY: json["coordinatE_Y"]?.toDouble(),
-        uid: json["uid"],
-        coordinatEX: json["coordinatE_X"]?.toDouble(),
-        sigNName: json["sigN_NAME"],
-        country: json["country"],
-        city: json["city"],
-        legaLName: json["legaL_NAME"],
-        address: json["address"],
-        tradEChannel: json["tradE_CHANNEL"],
-        subtradEChannel: json["subtradE_CHANNEL"],
-        county: json["county"],
-      );
+  factory Properties.fromJson(Map<String, dynamic> json) {
+    var res = json;
+    return Properties(
+      coordinatEY: json["coordinatE_Y"]?.toDouble(),
+      uid: json["uid"],
+      coordinatEX: json["coordinatE_X"]?.toDouble(),
+      sigNName: json["sigN_NAME"] ?? json["legaL_NAME"] ?? "",
+      country: json["country"],
+      city: json["city"],
+      legaLName: json["legaL_NAME"],
+      address: json["address"],
+      tradEChannel: json["tradE_CHANNEL"],
+      subtradEChannel: json["subtradE_CHANNEL"],
+      county: json["county"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "coordinatE_Y": coordinatEY,

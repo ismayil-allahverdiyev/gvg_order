@@ -4,16 +4,21 @@ import 'package:gvg_order/src/data/models/outlet_list/outlet_list_model.dart';
 import '../../../controllers/outlets/outlets_controller.dart';
 import '../../shared/widgets/custom_text_field_widget.dart';
 import '../../theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OutletsWidget extends StatelessWidget {
   final Function(int) onTap;
   final List<OutLet> outlistList;
   final bool hasPadding;
+  final Function(String) onChanged;
+  final TextEditingController searchController;
   const OutletsWidget({
     super.key,
     required this.onTap,
     required this.outlistList,
     this.hasPadding = true,
+    required this.onChanged,
+    required this.searchController,
   });
 
   @override
@@ -39,26 +44,28 @@ class OutletsWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Outlets",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.outlets,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: primaryColor,
                 ),
               ),
-              const Text(
-                "Select an outlet to continue",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.selectanoutlettocontinue,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: lightTextColor,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: CustomTextField(
-                  hintText: "Search Outlet",
+                  hintText: AppLocalizations.of(context)!.searchoutlet,
+                  onChanged: onChanged,
+                  controller: searchController,
                 ),
               ),
               Expanded(

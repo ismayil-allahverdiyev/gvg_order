@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../shared/widgets/custom_text_field_widget.dart';
 import '../../theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomSearchWidget extends StatelessWidget {
   final Function(String) onSearch;
@@ -29,7 +30,7 @@ class CustomSearchWidget extends StatelessWidget {
                 bottom: 4,
               ),
               child: CustomTextField(
-                  hintText: 'Search',
+                  hintText: AppLocalizations.of(context)!.search,
                   controller: controller,
                   onChanged: onSearch,
                   prefixIcon: const Icon(

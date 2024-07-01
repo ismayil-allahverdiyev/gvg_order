@@ -6,6 +6,7 @@ import 'package:gvg_order/src/controllers/local_storage/local_storage_controller
 import 'package:gvg_order/src/data/models/login/login_model.dart';
 import 'package:gvg_order/src/routes/app_routes.dart';
 import '../../data/repository/repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginController extends GetxController {
   final Repository repository;
@@ -13,36 +14,59 @@ class LoginController extends GetxController {
 
   LocalStorageController localStorageController = Get.find();
 
-  var emailTextController = TextEditingController(text: "cisemsiparis");
-  var passwordTextController = TextEditingController(text: "Siparis123");
+  var emailTextController = TextEditingController();
+  var passwordTextController = TextEditingController();
 
   var isRememberMe = false.obs;
+
+  var isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
+    emailTextController.text = localStorageController.getStringFromLocal(
+      LocalStorageConst.savedEmail,
+    );
   }
 
   getToken() async {
-    var result = await repository.postData(
-      endpoint:
-          "https://test-api-identity-proxy.geovisiongroup.com/api/v1/Connect/get-token",
-      base: "",
-      object: {
-        "username": emailTextController.text,
-        "password": passwordTextController.text,
-        "realm": "gvg"
-      },
-    );
-    if (result != null) {
-      var res = loginModelFromJson(result);
+    isLoading.value = true;
+    try {
+      var result = await repository.postData(
+        endpoint:
+            "https://test-api-identity-proxy.geovisiongroup.com/api/v1/Connect/get-token",
+        base: "",
+        object: {
+          "username": emailTextController.text,
+          "password": passwordTextController.text,
+          "realm": "gvg"
+        },
+      );
+      if (result != null) {
+        var res = loginModelFromJson(result);
 
-      await localStorageController.saveStringToLocal(
-          LocalStorageConst.jwtToken, res.accessToken);
-      await localStorageController.saveStringToLocal(
-          LocalStorageConst.refreshToken, res.refreshToken);
+        await localStorageController.saveStringToLocal(
+            LocalStorageConst.jwtToken, res.accessToken);
+        await localStorageController.saveStringToLocal(
+            LocalStorageConst.refreshToken, res.refreshToken);
+        if (isRememberMe.value) {
+          await localStorageController.saveStringToLocal(
+              LocalStorageConst.savedEmail, emailTextController.text);
+        } else {
+          await localStorageController.saveStringToLocal(
+              LocalStorageConst.savedEmail, "");
+        }
 
-      Get.toNamed(Routes.OUTLETS);
+        isLoading.value = false;
+
+        Get.toNamed(Routes.ORDERS);
+      }
+    } catch (e) {
+      isLoading.value = false;
+      repository.showMessage(
+        title: AppLocalizations.of(Get.context!)!.error,
+        message: e.toString(),
+      );
     }
   }
 }

@@ -6,7 +6,7 @@ import 'package:gvg_order/src/ui/basket/widgets/bottom_bar_widget.dart';
 import 'package:gvg_order/src/ui/shared/widgets/custom_app_bar_widget.dart';
 import 'package:gvg_order/src/ui/shared/widgets/custom_text_field_widget.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../data/utils/device_utils.dart';
 
 class PaymentPage extends StatelessWidget {
@@ -20,7 +20,7 @@ class PaymentPage extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: whiteColor,
-        appBar: const CustomAppBar(
+        appBar: CustomAppBar(
           title: 'Payment Page',
           isBasketVisible: false,
         ),
@@ -36,17 +36,17 @@ class PaymentPage extends StatelessWidget {
                     const SizedBox(
                       height: 12,
                     ),
-                    const Text(
-                      "Delivery Address",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.deliveryaddress,
+                      style: const TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
-                    const Text(
-                      "Street 1, City, Country",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.street1citycountry,
+                      style: const TextStyle(
                         color: lightTextColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,

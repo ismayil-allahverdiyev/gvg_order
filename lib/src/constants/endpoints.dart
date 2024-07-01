@@ -3,6 +3,7 @@ class EndPoint {
   static const base_url_product =
       "https://test-api-gateway.geovisiongroup.com/product/api/";
 
+  // static const base_url_order = "http://185.46.55.50:7190/api/";
   static const base_url_order =
       "https://test-api-gateway.geovisiongroup.com/order/api/";
 
@@ -31,4 +32,10 @@ class EndPoint {
   static const cardInfo = "mobile/card-info";
 
   static const cards = "mobile/cards";
+
+  static const cardDetail = "mobile/card-detail";
+
+  static const addOrRemoveFavourites = "mobile/add-or-remove-favorite";
+
+  static const getFavourites = "mobile/get-favorites";
 }

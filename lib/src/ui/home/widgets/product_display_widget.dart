@@ -6,6 +6,7 @@ import 'package:gvg_order/src/routes/app_routes.dart';
 import '../../../controllers/home/home_controller.dart';
 import '../../shared/widgets/custom_progress_indicator_widget.dart';
 import '../../theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductDisplayWidget extends GetWidget<HomeController> {
   final OrderList order;
@@ -57,7 +58,7 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
                                       controller.orderList[index].imageFile!
                                               .image ==
                                           null
-                                  ? DecorationImage(
+                                  ? const DecorationImage(
                                       image: AssetImage(
                                         Assets.image_placeholder,
                                       ),
@@ -131,6 +132,22 @@ class ProductDisplayWidget extends GetWidget<HomeController> {
                     ),
                   ),
                 ],
+              ),
+              Positioned(
+                left: Get.width / 6 * 0.15,
+                top: -12,
+                child: GetBuilder<HomeController>(
+                  id: "orderList",
+                  builder: (controller) {
+                    return controller.orderList[index].isFavorite
+                        ? const Icon(
+                            Icons.star_rounded,
+                            color: Colors.orangeAccent,
+                            size: 32,
+                          )
+                        : const SizedBox();
+                  },
+                ),
               ),
               Positioned(
                 top: -Get.width * 0.05,

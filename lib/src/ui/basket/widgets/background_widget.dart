@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketBackgroundWidget extends StatelessWidget {
   const BasketBackgroundWidget({
@@ -11,20 +12,20 @@ class BasketBackgroundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: redColor.withOpacity(0.1),
-      child: const Padding(
-        padding: EdgeInsets.only(right: 16.0),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 16.0),
         child: Align(
           alignment: Alignment.centerRight,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 CupertinoIcons.delete,
                 color: redColor,
               ),
               Text(
-                "Delete",
-                style: TextStyle(
+                AppLocalizations.of(context)!.delete,
+                style: const TextStyle(
                   color: redColor,
                   fontWeight: FontWeight.bold,
                 ),

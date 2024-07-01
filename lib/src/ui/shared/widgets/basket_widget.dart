@@ -2,10 +2,11 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gvg_order/src/constants/assets.dart';
 import 'package:gvg_order/src/controllers/basket/basket_controller.dart';
 import 'package:gvg_order/src/controllers/home/home_controller.dart';
 import 'package:gvg_order/src/routes/app_routes.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
 
 class BasketWidget extends GetWidget<BasketController> {
@@ -34,6 +35,13 @@ class BasketWidget extends GetWidget<BasketController> {
             children: [
               SizedBox(
                 width: Get.width * 0.1,
+                child: Center(
+                  child: Image.asset(
+                    Assets.basket_icon,
+                    scale: 2,
+                    color: greyColor,
+                  ),
+                ),
               ),
               Container(
                 decoration: BoxDecoration(

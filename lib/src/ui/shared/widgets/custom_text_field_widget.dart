@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final TextEditingController? controller;
   final Function(String)? onChanged;
+  final bool isHidden;
   const CustomTextField({
     super.key,
     required this.hintText,
@@ -17,14 +18,16 @@ class CustomTextField extends StatelessWidget {
     this.maxLines,
     this.controller,
     this.onChanged,
+    this.isHidden = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines: maxLines,
+      maxLines: maxLines ?? 1,
       controller: controller,
       onChanged: onChanged,
+      obscureText: isHidden,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 8.0,

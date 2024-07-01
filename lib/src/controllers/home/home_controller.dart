@@ -7,12 +7,15 @@ import '../../data/models/parent_categories/parent_categories_model.dart';
 import '../../data/models/sub_categories/sub_categories_model.dart';
 import '../../data/repository/repository.dart';
 import '../basket/basket_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeController extends GetxController with GetTickerProviderStateMixin {
   final Repository repository;
   HomeController({required this.repository});
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
+
+  var isLoading = false.obs;
 
   var outletId = "";
   var outletName = "";
@@ -48,49 +51,56 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   getListOrders() async {
-    orderList.clear();
-    orderList.refresh();
-
-    var response = orderListModelFromJson(
-      await repository.getData(
-        base: EndPoint.base_url_product,
-        endpoint: EndPoint.get_list_orders,
-        query: {
-          "listId": listId,
-          "parentCategoryId": selectedParentCategory.value?.id ?? "",
-          "subCategoryId": selectedSubCategory.value?.id ?? "",
-          "pageNumber": 1,
-          "pageSize": 15,
-          "searchText": searchTextEditingController.text,
-        },
-      ),
-    );
-
-    if (response.code == 200) {
-      orderList.value = response.data ?? [];
-
-      var basketController = Get.find<BasketController>();
-
-      orderList.forEach((element) {
-        var index = basketController.basketList.indexWhere(
-            (basketElement) => basketElement.productId == element.productId);
-        if (index != -1) {
-          element.selectedCount =
-              basketController.basketList[index].selectedCount;
-        }
-      });
-
+    try {
+      isLoading.value = true;
+      orderList.clear();
       orderList.refresh();
 
-      orderList.forEach((element) async {
-        element.imageFile = await getFile(orderList: element);
-        orderList.refresh();
-      });
-    } else {
-      repository.showMessage(
-        title: "Error",
-        message: response.message,
+      var response = orderListModelFromJson(
+        await repository.getData(
+          base: EndPoint.base_url_product,
+          endpoint: EndPoint.get_list_orders,
+          query: {
+            "listId": listId,
+            "parentCategoryId": selectedParentCategory.value?.id ?? "",
+            "subCategoryId": selectedSubCategory.value?.id ?? "",
+            "pageNumber": 1,
+            "pageSize": 15,
+            "searchText": searchTextEditingController.text,
+          },
+        ),
       );
+
+      isLoading.value = false;
+
+      if (response.code == 200) {
+        orderList.value = response.data ?? [];
+
+        var basketController = Get.find<BasketController>();
+
+        orderList.forEach((element) {
+          var index = basketController.basketList.indexWhere(
+              (basketElement) => basketElement.productId == element.productId);
+          if (index != -1) {
+            element.selectedCount =
+                basketController.basketList[index].selectedCount;
+          }
+        });
+
+        orderList.refresh();
+
+        orderList.forEach((element) async {
+          element.imageFile = await getFile(orderList: element);
+          orderList.refresh();
+        });
+      } else {
+        repository.showMessage(
+          title: AppLocalizations.of(Get.context!)!.error,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
     }
   }
 
@@ -109,7 +119,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       return res.data;
     } else {
       repository.showMessage(
-        title: "Error",
+        title: AppLocalizations.of(Get.context!)!.error,
         message: res.message,
       );
     }
@@ -159,59 +169,72 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       });
     } else {
       repository.showMessage(
-        title: "Error",
+        title: AppLocalizations.of(Get.context!)!.error,
         message: response.message,
       );
     }
   }
 
   getParentCategories() async {
-    parentCategories.clear();
-    var response = parentCategoriesModelFromJson(
-      await repository.getData(
-        base: EndPoint.base_url_product,
-        endpoint: EndPoint.get_parent_categories,
-      ),
-    );
-
-    if (response.code == 200) {
-      parentCategories.value = response.data;
-      selectedParentCategory.value = response.data.first;
-      await getSUbCategories();
-    } else {
-      repository.showMessage(
-        title: "Error",
-        message: response.message,
+    isLoading.value = true;
+    try {
+      parentCategories.clear();
+      var response = parentCategoriesModelFromJson(
+        await repository.getData(
+          base: EndPoint.base_url_product,
+          endpoint: EndPoint.get_parent_categories,
+        ),
       );
+      isLoading.value = false;
+
+      if (response.code == 200) {
+        parentCategories.value = response.data;
+        selectedParentCategory.value = response.data.first;
+        await getSUbCategories();
+      } else {
+        repository.showMessage(
+          title: AppLocalizations.of(Get.context!)!.error,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
     }
   }
 
   getSUbCategories() async {
-    subCategories.clear();
-    orderList.clear();
-    var response = subCategoriesModelFromJson(
-      await repository.getData(
-        base: EndPoint.base_url_product,
-        endpoint: EndPoint.get_sub_categories,
-        query: {
-          "parentCategoryId": selectedParentCategory.value!.id,
-        },
-      ),
-    );
-
-    if (response.code == 200) {
-      subCategories.value = response.data;
-      if (response.data.isNotEmpty) {
-        selectedSubCategory.value = response.data.first;
-      } else {
-        selectedSubCategory.value = null;
-      }
-      await getListOrders();
-    } else {
-      repository.showMessage(
-        title: "Error",
-        message: response.message,
+    try {
+      isLoading.value = true;
+      subCategories.clear();
+      orderList.clear();
+      var response = subCategoriesModelFromJson(
+        await repository.getData(
+          base: EndPoint.base_url_product,
+          endpoint: EndPoint.get_sub_categories,
+          query: {
+            "parentCategoryId": selectedParentCategory.value!.id,
+          },
+        ),
       );
+
+      isLoading.value = false;
+
+      if (response.code == 200) {
+        subCategories.value = response.data;
+        if (response.data.isNotEmpty) {
+          selectedSubCategory.value = response.data.first;
+        } else {
+          selectedSubCategory.value = null;
+        }
+        await getListOrders();
+      } else {
+        repository.showMessage(
+          title: AppLocalizations.of(Get.context!)!.error,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
     }
   }
 

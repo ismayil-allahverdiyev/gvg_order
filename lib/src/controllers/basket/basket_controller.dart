@@ -1,14 +1,18 @@
 import 'package:get/get.dart';
+import 'package:gvg_order/src/controllers/orders/orders_controller.dart';
 import 'package:gvg_order/src/data/models/general/general_model.dart';
 import 'package:gvg_order/src/data/models/kdv_products/kdv_products_model.dart';
 import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import '../../constants/endpoints.dart';
 import '../../data/repository/repository.dart';
 import '../home/home_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketController extends GetxController {
   final Repository repository;
   BasketController({required this.repository});
+
+  var isLoading = false.obs;
 
   var basketList = <OrderList>[].obs;
   var kdvProducts = <KdvProduct>[].obs;
@@ -55,52 +59,13 @@ class BasketController extends GetxController {
   }
 
   getTemporaryCardInfo() async {
-    var response = kdvProductsModelFromJson(
-      await repository.postData(
-        base: EndPoint.base_url_product,
-        endpoint: EndPoint.get_temporary_card_info,
-        list: basketList.map(
-          (e) {
-            return {
-              "id": e.productId,
-              "listId": e.productListId,
-              "isCampaign": e.isCampaign,
-              "amount": e.selectedCount,
-            };
-          },
-        ).toList(),
-      ),
-    );
-
-    if (response.code == 200) {
-      kdvProducts.value = response.data;
-
-      kdvTotal.value = 0.0;
-      justKdvTotal.value = 0.0;
-
-      kdvProducts.forEach(
-        (element) {
-          kdvTotal.value += element.price;
-          justKdvTotal.value += element.kdv;
-        },
-      );
-    } else {
-      repository.showMessage(
-        title: "Error",
-        message: response.message,
-      );
-    }
-  }
-
-  cardInfo() async {
-    var homeController = Get.find<HomeController>();
-
-    var response = generalModelFromJson(
-      await repository.postData(
-        base: EndPoint.base_url_product,
-        endpoint: EndPoint.cardInfo,
-        object: {
-          "model": basketList.map(
+    try {
+      isLoading.value = true;
+      var response = kdvProductsModelFromJson(
+        await repository.postData(
+          base: EndPoint.base_url_product,
+          endpoint: EndPoint.get_temporary_card_info,
+          list: basketList.map(
             (e) {
               return {
                 "id": e.productId,
@@ -110,26 +75,92 @@ class BasketController extends GetxController {
               };
             },
           ).toList(),
-          "cardInfo": {
-            "plannedDueDate": selectedDate.value.toIso8601String() + "Z",
-            "outletId": homeController.outletId,
-            "outletName": homeController.outletName,
-            "isPayment": false,
-          }
-        },
-      ),
-    );
+        ),
+      );
 
-    if (response.code == 200) {
-      basketList.clear();
-      total.value = 0.0;
-      kdvTotal.value = 0.0;
-      justKdvTotal.value = 0.0;
-      Get.close(2);
-    } else {
+      isLoading.value = false;
+
+      if (response.code == 200) {
+        kdvProducts.value = response.data;
+
+        kdvTotal.value = 0.0;
+        justKdvTotal.value = 0.0;
+
+        kdvProducts.forEach(
+          (element) {
+            kdvTotal.value += element.price;
+            justKdvTotal.value += element.kdv;
+          },
+        );
+      } else {
+        repository.showMessage(
+          title: AppLocalizations.of(Get.context!)!.error,
+          message: response.message,
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
       repository.showMessage(
-        title: "Error",
-        message: response.message ?? "",
+        title: AppLocalizations.of(Get.context!)!.error,
+        message: e.toString(),
+      );
+    }
+  }
+
+  cardInfo() async {
+    var homeController = Get.find<HomeController>();
+
+    try {
+      isLoading.value = true;
+
+      Get.back();
+
+      var response = generalModelFromJson(
+        await repository.postData(
+          base: EndPoint.base_url_product,
+          endpoint: EndPoint.cardInfo,
+          object: {
+            "model": basketList.map(
+              (e) {
+                return {
+                  "id": e.productId,
+                  "listId": e.productListId,
+                  "isCampaign": e.isCampaign,
+                  "amount": e.selectedCount,
+                };
+              },
+            ).toList(),
+            "cardInfo": {
+              "plannedDueDate": selectedDate.value.toIso8601String() + "Z",
+              "outletId": homeController.outletId,
+              "outletName": homeController.outletName,
+              "isPayment": false,
+            }
+          },
+        ),
+      );
+
+      isLoading.value = false;
+
+      if (response.code == 200) {
+        basketList.clear();
+        total.value = 0.0;
+        kdvTotal.value = 0.0;
+        justKdvTotal.value = 0.0;
+        Get.close(3);
+        var ordersController = Get.find<OrdersController>();
+        await ordersController.cards();
+      } else {
+        repository.showMessage(
+          title: AppLocalizations.of(Get.context!)!.error,
+          message: response.message ?? "",
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+      repository.showMessage(
+        title: AppLocalizations.of(Get.context!)!.error,
+        message: e.toString(),
       );
     }
   }

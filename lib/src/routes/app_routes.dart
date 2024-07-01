@@ -9,4 +9,5 @@ class Routes {
   static const OUTLETS = '/outlets';
   static const ORDERS = '/orders';
   static const FAVOURITES = '/favourites';
+  static const CARD_DETAIL = '/card_detail';
 }

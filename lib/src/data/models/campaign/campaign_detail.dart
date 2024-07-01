@@ -94,7 +94,8 @@ class CampaignDetail {
       beginDate: DateTime.parse(json["beginDate"]),
       endDate: DateTime.parse(json["endDate"]),
       message: json["message"],
-      discountedPrice: json["discountedPrice"],
+      discountedPrice:
+          double.parse((json["discountedPrice"] ?? 0.0).toString()),
       logo: json["logo"],
       fileWithModels: List<dynamic>.from(json["fileWithModels"].map((x) => x)),
       deletedFileName: json["deletedFileName"],
@@ -213,11 +214,12 @@ class ProductListInfo {
   factory ProductListInfo.fromJson(Map<String, dynamic> json) {
     var res = json;
     return ProductListInfo(
-      listPrice: json["listPrice"],
+      listPrice: double.parse((json["listPrice"] ?? 0).toString()),
       productId: json["productId"],
       productListId: json["productListId"],
       productListName: json["productListName"],
-      newListPrice: json["newListPrice"] ?? json["listPrice"],
+      newListPrice: double.parse(
+          (json["newListPrice"] ?? json["listPrice"] ?? 0).toString()),
       campaignQuantity: json["campaignQuantity"],
       piecesInBox: json["piecesInBox"],
       kdv: json["kdv"],

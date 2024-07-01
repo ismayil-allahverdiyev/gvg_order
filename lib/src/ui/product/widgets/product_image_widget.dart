@@ -53,12 +53,19 @@ class ProductImageWidget extends GetWidget<ProductController> {
                   return Icon(
                     controller.productDetail.value != null &&
                             controller.productDetail.value!.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_outline_sharp,
+                        ? Icons.star_rounded
+                        : Icons.star_border_rounded,
+                    color: controller.productDetail.value != null &&
+                            controller.productDetail.value!.isFavorite
+                        ? Colors.orangeAccent
+                        : lightGreyColor,
+                    size: 32,
                   );
                 },
               ),
-              onPressed: () {},
+              onPressed: () {
+                controller.addOrRemoveFavourites();
+              },
             ),
           ),
         ],

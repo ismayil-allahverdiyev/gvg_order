@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import '../shared/widgets/custom_progress_indicator_widget.dart';
 import '../theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CouponPage extends StatelessWidget {
   const CouponPage({super.key});
@@ -18,9 +19,9 @@ class CouponPage extends StatelessWidget {
         surfaceTintColor: whiteColor,
         shadowColor: Colors.black,
         elevation: 1,
-        title: const Text(
-          'Coupons / Campaigns',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context)!.cuponscampaigns,
+          style: const TextStyle(
             color: lightTextColor,
             fontWeight: FontWeight.bold,
           ),

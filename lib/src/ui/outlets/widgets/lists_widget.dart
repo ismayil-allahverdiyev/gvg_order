@@ -6,6 +6,7 @@ import '../../../controllers/outlets/outlets_controller.dart';
 import '../../../routes/app_routes.dart';
 import '../../shared/widgets/custom_text_field_widget.dart';
 import '../../theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListsWidget extends GetWidget<OutletsController> {
   const ListsWidget({
@@ -35,17 +36,17 @@ class ListsWidget extends GetWidget<OutletsController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Lists",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.lists,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: primaryColor,
                 ),
               ),
-              const Text(
-                "Select a list to start shopping",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.selectalisttostartshopping,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: lightTextColor,

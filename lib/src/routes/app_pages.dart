@@ -1,12 +1,16 @@
 import 'package:get/get.dart';
 import 'package:gvg_order/src/bindings/basket/basket_bindings.dart';
+import 'package:gvg_order/src/bindings/card_detail/card_detail_bindings.dart';
 import 'package:gvg_order/src/bindings/cupon/cupon_bindings.dart';
+import 'package:gvg_order/src/bindings/favourites/favourites_bindings.dart';
 import 'package:gvg_order/src/bindings/login/login_bindings.dart';
 import 'package:gvg_order/src/bindings/outlets/outlets_bindings.dart';
 import 'package:gvg_order/src/bindings/payment/payment_bindings.dart';
 import 'package:gvg_order/src/bindings/product/product_bindings.dart';
 import 'package:gvg_order/src/ui/basket/basket_page.dart';
+import 'package:gvg_order/src/ui/card_detail/card_detail_page.dart';
 import 'package:gvg_order/src/ui/coupon/coupon_page.dart';
+import 'package:gvg_order/src/ui/favourites/favourites_page.dart';
 import 'package:gvg_order/src/ui/outlets/outlets_page.dart';
 import '../bindings/app/app_bindings.dart';
 import '../bindings/home/home_bindings.dart';
@@ -65,6 +69,16 @@ class AppPages {
       name: Routes.ORDERS,
       page: () => const OrdersPage(),
       binding: OrdersBindings(),
+    ),
+    GetPage(
+      name: Routes.CARD_DETAIL,
+      page: () => const CardDetailPage(),
+      binding: CardDetailBindings(),
+    ),
+    GetPage(
+      name: Routes.FAVOURITES,
+      page: () => const FavouritesPage(),
+      binding: FavouritesBindings(),
     ),
   ];
 }

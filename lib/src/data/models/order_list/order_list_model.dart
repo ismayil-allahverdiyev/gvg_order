@@ -67,6 +67,7 @@ class OrderList {
   String? typeId;
   double discountedPrice;
   bool isCampaign = false;
+  bool isFavorite;
   ImageFile? imageFile;
 
   OrderList({
@@ -80,6 +81,7 @@ class OrderList {
     this.selectedCount = 0,
     this.typeId,
     this.discountedPrice = 0,
+    required this.isFavorite,
   });
 
   factory OrderList.fromJson(Map<String, dynamic> json) {
@@ -90,17 +92,20 @@ class OrderList {
       productListId: json["productListId"],
       productName: json["productName"] ?? json["name"],
       piecesInBox: json["piecesInBox"],
-      listPrice: json["listPrice"] ??
-          json["discountedListPrice"] ??
-          json["discountedPrice"] ??
-          0,
-      discountedListPrice: json["discountedListPrice"] ??
-          json["listPrice"] ??
-          json["discountedPrice"] ??
-          0,
+      listPrice: ((json["listPrice"] ??
+              json["discountedListPrice"] ??
+              json["discountedPrice"] ??
+              0) as int)
+          .toDouble(),
+      discountedListPrice: ((json["discountedListPrice"] ??
+              json["listPrice"] ??
+              json["discountedPrice"] ??
+              0) as int)
+          .toDouble(),
       selectedCount: json["selectedCount"] ?? 0,
       typeId: json["typeId"],
-      discountedPrice: json["discountedPrice"] ?? 0,
+      discountedPrice: ((json["discountedPrice"] ?? 0) as int).toDouble(),
+      isFavorite: json["isFavorite"],
     );
   }
 
@@ -116,5 +121,6 @@ class OrderList {
         "typeId": typeId,
         "discountedPrice": discountedPrice,
         "imageFile": imageFile?.toJson() ?? "",
+        "isFavorite": isFavorite,
       };
 }

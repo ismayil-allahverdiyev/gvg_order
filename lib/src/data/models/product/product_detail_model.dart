@@ -87,8 +87,9 @@ class ProductData {
       id: json["id"],
       productListId: json["productListId"],
       productName: json["productName"],
-      listPrice: json["listPrice"],
-      discountedListPrice: json["discountedListPrice"] ?? json["listPrice"],
+      listPrice: double.parse((json["listPrice"] ?? 0).toString()),
+      discountedListPrice: double.parse(
+          (json["discountedListPrice"] ?? json["listPrice"] ?? 0.0).toString()),
       description1: json["description1"],
       description2: json["description2"],
       description3: json["description3"],

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gvg_order/src/controllers/basket/basket_controller.dart';
 import 'package:gvg_order/src/ui/shared/widgets/custom_dialog_widget.dart';
 import 'package:gvg_order/src/ui/theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomBasketDialog extends GetWidget<BasketController> {
   const CustomBasketDialog({super.key});
@@ -16,10 +17,10 @@ class CustomBasketDialog extends GetWidget<BasketController> {
           height: Get.height * 0.5,
           child: ListView(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Select Delivery Date",
+                  AppLocalizations.of(context)!.selectdeliverydate,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: lightTextColor,
@@ -52,10 +53,10 @@ class CustomBasketDialog extends GetWidget<BasketController> {
                 color: primaryColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  "Finish payment",
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.finishpayment,
+                  style: const TextStyle(
                     color: whiteColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

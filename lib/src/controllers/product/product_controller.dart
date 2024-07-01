@@ -1,16 +1,20 @@
 import 'package:get/get.dart';
 import 'package:gvg_order/src/controllers/home/home_controller.dart';
 import 'package:gvg_order/src/data/models/campaign/campaign_detail.dart';
+import 'package:gvg_order/src/data/models/general/general_model.dart';
 import 'package:gvg_order/src/data/models/order_list/order_list_model.dart';
 import 'package:gvg_order/src/data/models/product/product_detail_model.dart';
 import '../../constants/endpoints.dart';
 import '../../data/models/image_file/image_file_model.dart';
 import '../../data/repository/repository.dart';
 import '../basket/basket_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductController extends GetxController {
   final Repository repository;
   ProductController({required this.repository});
+
+  var isLoading = false.obs;
 
   var listId = "";
 
@@ -61,6 +65,7 @@ class ProductController extends GetxController {
         selectedCount: selectedCount.value,
         id: productDetail.value!.id,
         piecesInBox: 0,
+        isFavorite: productDetail.value!.isFavorite,
       ),
     );
 
@@ -86,22 +91,35 @@ class ProductController extends GetxController {
         selectedCount: selectedCount.value,
         id: productDetail.value!.id,
         piecesInBox: 0,
+        isFavorite: productDetail.value!.isFavorite,
       ),
     );
 
-    homeController!.orderList.forEach((element) {
+    for (var element in homeController!.orderList) {
       if (element.productId == productDetail.value!.id) {
         element.selectedCount = selectedCount.value;
+        break;
       }
-    });
+    }
     homeController!.update(["orderList"]);
   }
 
   getDetail() async {
-    if (isCampaign) {
-      await getCampaign();
-    } else {
-      await getProductDetail();
+    try {
+      isLoading.value = true;
+      if (isCampaign) {
+        await getCampaign();
+      } else {
+        await getProductDetail();
+      }
+
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+      repository.showMessage(
+        title: AppLocalizations.of(Get.context!)!.error,
+        message: e.toString(),
+      );
     }
 
     await getFile(
@@ -146,7 +164,7 @@ class ProductController extends GetxController {
       });
     } else {
       repository.showMessage(
-        title: "Error",
+        title: AppLocalizations.of(Get.context!)!.error,
         message: response.message,
       );
     }
@@ -168,7 +186,7 @@ class ProductController extends GetxController {
       productDetail.refresh();
     } else {
       repository.showMessage(
-        title: "Error",
+        title: AppLocalizations.of(Get.context!)!.error,
         message: res.message,
       );
     }
@@ -191,8 +209,39 @@ class ProductController extends GetxController {
       productDetail.value = response.data;
     } else {
       repository.showMessage(
-        title: "Error",
+        title: AppLocalizations.of(Get.context!)!.error,
         message: response.message,
+      );
+    }
+  }
+
+  addOrRemoveFavourites() async {
+    var res = generalModelFromJson(
+      await repository.postData(
+        base: EndPoint.base_url_product,
+        endpoint: EndPoint.addOrRemoveFavourites,
+        object: {
+          "productId": productId,
+        },
+      ),
+    );
+
+    if (res.code == 200) {
+      productDetail.value!.isFavorite = !productDetail.value!.isFavorite;
+      productDetail.refresh();
+
+      for (var element in homeController!.orderList) {
+        if (element.productId == productDetail.value!.id) {
+          element.isFavorite = productDetail.value!.isFavorite;
+          homeController!.update(["orderList"]);
+
+          break;
+        }
+      }
+    } else {
+      repository.showMessage(
+        title: AppLocalizations.of(Get.context!)!.error,
+        message: res.message ?? "",
       );
     }
   }

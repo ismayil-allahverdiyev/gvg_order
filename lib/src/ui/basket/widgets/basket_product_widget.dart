@@ -76,27 +76,6 @@ class BasketProductWidget extends GetWidget<BasketController> {
                       ),
                     );
                   }),
-                  // CachedNetworkImage(
-                  //   imageUrl:
-                  //       "https://media.istockphoto.com/id/458464735/tr/foto%C4%9Fraf/coke.jpg?s=2048x2048&w=is&k=20&c=DpnH4v1YRs4l1rmzu-xFi3wRjK44FUTYQBD8FJTwHx0=",
-                  //   imageBuilder: (context, imageProvider) => Container(
-                  //     width: Get.width * 0.2,
-                  //     height: Get.width * 0.2,
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       border: Border.all(
-                  //         color: lightGreyColor,
-                  //       ),
-                  //       image: DecorationImage(
-                  //         image: imageProvider,
-                  //         fit: BoxFit.cover,
-                  //       ),
-                  //     ),
-                  //   ),
-                  //   placeholder: (context, url) => const PlaceHolderWidget(),
-                  //   errorWidget: (context, url, error) =>
-                  //       const PlaceHolderWidget(),
-                  // ),
                   const SizedBox(
                     width: 12,
                   ),
@@ -216,28 +195,6 @@ class BasketProductWidget extends GetWidget<BasketController> {
               : const SizedBox()
         ],
       ),
-    );
-  }
-}
-
-class PlaceHolderWidget extends StatelessWidget {
-  const PlaceHolderWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: Get.width * 0.2,
-      height: Get.width * 0.2,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: lightGreyColor,
-        ),
-        color: lightGreyColor,
-      ),
-      child: const CustomCircularProgressIndicator(),
     );
   }
 }
